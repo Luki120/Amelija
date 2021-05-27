@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>HS</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false/>
+				<key>defaults</key>
+				<string>me.luki.amēlijaprefs</string>
+				<key>key</key>
+				<string>epicBlur</string>
+				<key>label</key>
+				<string>Epic Blur</string>
+				<key>PostNotification</key>
+				<string>me.luki.amēlijaprefs.loadPrefs</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false />
+				<key>defaults</key>
+				<string>me.luki.amēlijaprefs</string>
+				<key>key</key>
+				<string>hsBlur</string>
+				<key>label</key>
+				<string>Yes</string>
+				<key>PostNotification</key>
+				<string>me.luki.amēlijaprefs.loadPrefs</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSLinkListCell</string>
+				<key>detail</key>
+				<string>PSListItemsController</string>
+				<key>defaults</key>
+				<string>me.luki.amēlijaprefs</string>
+				<key>default</key>
+				<integer>0</integer>
+				<key>key</key>
+				<string>blurType</string>
+				<key>label</key>
+				<string>Misc Blurs</string>
+				<key>validValues</key>
+				<array>
+					<integer>0</integer>
+					<integer>1</integer>
+					<integer>2</integer>
+					<integer>3</integer>
+					<integer>4</integer>
+					<integer>5</integer>
+					<integer>6</integer>
+				</array>
+				<key>validTitles</key>
+				<array>
+					<string>Dark</string>
+					<string>Light</string>
+					<string>Adaptive</string>
+					<string>Promiment</string>
+					<string>System Thin</string>
+					<string>System Ultra Thin</string>
+					<string>System Chrome Material</string>
+				</array>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSliderCell</string>
+				<key>default</key>
+				<real>1</real>
+				<key>defaults</key>
+				<string>me.luki.amēlijaprefs</string>
+				<key>key</key>
+				<string>intensity</string>
+				<key>min</key>
+				<real>0</real>
+				<key>max</key>
+				<real>1</real>
+				<key>showValue</key>
+				<true/>
+			</dict>
+		</array>
+		<key>title</key>
+		<string>Amēlija</string>
+	</dict>
+</plist>
