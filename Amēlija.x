@@ -51,9 +51,9 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 static void loadPrefs() {
 
 
-    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeThere];
-    NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
-    lsBlur = prefs[@"lsBlur"] ? [prefs[@"lsBlur"] boolValue] : NO;
+	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeThere];
+	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
+	lsBlur = prefs[@"lsBlur"] ? [prefs[@"lsBlur"] boolValue] : NO;
 	hsBlur = prefs[@"hsBlur"] ? [prefs[@"hsBlur"] boolValue] : NO;
 	epicBlur = prefs[@"epicBlur"] ? [prefs[@"epicBlur"] boolValue] : NO;
 	blurType = prefs[@"blurType"] ? [prefs[@"blurType"] integerValue] : 0;
@@ -79,7 +79,7 @@ static void loadPrefs() {
 	if(lsBlur) {
 
 
-    	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+		_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
 		_UIBackdropView *blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero
 		autosizesToFitSuperview:YES settings:settings];
@@ -156,7 +156,7 @@ static void loadPrefs() {
 			default:
     	
 				hsBlurType = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    			break;
+				break;
 
 
 		}
@@ -165,7 +165,7 @@ static void loadPrefs() {
 		UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:hsBlurType];
 		blurEffectView.alpha = intensity;
 		blurEffectView.frame = self.view.bounds;
-    	[blurEffectView setClipsToBounds:YES];
+		blurEffectView.clipsToBounds = YES;
 		blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.view insertSubview:blurEffectView atIndex:0];
 
@@ -205,8 +205,8 @@ static void loadPrefs() {
 
 
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeThere];
-    NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
-    lsBlur = prefs[@"lsBlur"] ? [prefs[@"lsBlur"] boolValue] : NO;
+	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
+	lsBlur = prefs[@"lsBlur"] ? [prefs[@"lsBlur"] boolValue] : NO;
 	hsBlur = prefs[@"hsBlur"] ? [prefs[@"hsBlur"] boolValue] : NO;
 	epicBlur = prefs[@"epicBlur"] ? [prefs[@"epicBlur"] boolValue] : NO;
 	blurType = prefs[@"blurType"] ? [prefs[@"blurType"] integerValue] : 0;
