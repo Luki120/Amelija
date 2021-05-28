@@ -32,6 +32,10 @@
 			</dict>
 			<dict>
 				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
 				<string>PSLinkCell</string>
 				<key>cellClass</key>
 				<string>AmelijaTableCell</string>
@@ -64,7 +68,7 @@
 				<key>footerAlignment</key>
 				<real>1</real>
 				<key>footerText</key>
-				<string>made by Luki with &#x1f1f1;&#x1f1fb;❤️</string>
+				<string>Izgatavojis Luki ar &#x1f49c;</string>
 				<key>isStaticText</key>
 				<true/>
 			</dict>
