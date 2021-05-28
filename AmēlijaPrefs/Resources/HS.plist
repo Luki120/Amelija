@@ -18,11 +18,27 @@
 				<key>defaults</key>
 				<string>me.luki.amēlijaprefs</string>
 				<key>key</key>
-				<string>epicBlur</string>
+				<string>epicHSBlur</string>
 				<key>label</key>
 				<string>Epic Blur</string>
 				<key>PostNotification</key>
 				<string>me.luki.amēlijaprefs.loadPrefs</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSliderCell</string>
+				<key>default</key>
+				<real>1</real>
+				<key>defaults</key>
+				<string>me.luki.amēlijaprefs</string>
+				<key>key</key>
+				<string>epicHSBlurIntensity</string>
+				<key>min</key>
+				<real>0</real>
+				<key>max</key>
+				<real>1</real>
+				<key>showValue</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -32,13 +48,13 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>default</key>
-				<false />
+				<false/>
 				<key>defaults</key>
 				<string>me.luki.amēlijaprefs</string>
 				<key>key</key>
 				<string>hsBlur</string>
 				<key>label</key>
-				<string>Yes</string>
+				<string>Misc Blurs</string>
 				<key>PostNotification</key>
 				<string>me.luki.amēlijaprefs.loadPrefs</string>
 			</dict>
@@ -92,7 +108,7 @@
 				<key>defaults</key>
 				<string>me.luki.amēlijaprefs</string>
 				<key>key</key>
-				<string>intensity</string>
+				<string>hsIntensity</string>
 				<key>min</key>
 				<real>0</real>
 				<key>max</key>

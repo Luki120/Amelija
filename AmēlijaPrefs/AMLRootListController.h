@@ -1,6 +1,20 @@
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
+#import <Preferences/PSTableCell.h>
 
+
+
+
+@interface AmelijaTableCell : PSTableCell
+@end
+
+
+@interface AmelijaLinksRootListController : PSListController
+@end
+
+
+@interface AmelijaContributorsRootListController : PSListController
+@end
 
 
 @interface AMLRootListController : PSListController

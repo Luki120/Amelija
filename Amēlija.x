@@ -3,14 +3,30 @@
 
 
 
+// LS 
+
+
 static BOOL lsBlur;
+static BOOL epicLSBlur;
+
+static int lsBlurType;
+
+float lsIntensity = 1.0f;
+float epicLSBlurIntensity = 1.0f;
+
+UIBlurEffect* lsBlurEffect;
+
+
+// HS
+
+
 static BOOL hsBlur;
-static BOOL epicBlur;
+static BOOL epicHSBlur;
+
 static int blurType;
-float intensity = 1.0f;
 
-
-
+float hsIntensity = 1.0f;
+float epicHSBlurIntensity = 1.0f;
 
 UIBlurEffect* hsBlurType;
 
@@ -53,11 +69,20 @@ static void loadPrefs() {
 
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeThere];
 	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
+
+	
 	lsBlur = prefs[@"lsBlur"] ? [prefs[@"lsBlur"] boolValue] : NO;
+	epicLSBlur = prefs[@"epicLSBlur"] ? [prefs[@"epicLSBlur"] boolValue] : NO;
+	lsBlurType = prefs[@"lsBlurType"] ? [prefs[@"lsBlurType"] integerValue] : 0;
+	lsIntensity = prefs[@"lsIntensity"] ? [prefs[@"lsIntensity"] floatValue] : 1.0f;
+	epicLSBlurIntensity = prefs[@"epicLSBlurIntensity"] ? [prefs[@"epicLSBlurIntensity"] floatValue] : 1.0f;
+
+
 	hsBlur = prefs[@"hsBlur"] ? [prefs[@"hsBlur"] boolValue] : NO;
-	epicBlur = prefs[@"epicBlur"] ? [prefs[@"epicBlur"] boolValue] : NO;
+	epicHSBlur = prefs[@"epicHSBlur"] ? [prefs[@"epicHSBlur"] boolValue] : NO;
 	blurType = prefs[@"blurType"] ? [prefs[@"blurType"] integerValue] : 0;
-	intensity = prefs[@"intensity"] ? [prefs[@"intensity"] floatValue] : 1.0f;
+	hsIntensity = prefs[@"hsIntensity"] ? [prefs[@"hsIntensity"] floatValue] : 1.0f;
+	epicHSBlurIntensity = prefs[@"epicHSBlurIntensity"] ? [prefs[@"epicHSBlurIntensity"] floatValue] : 1.0f;
 
 
 }
@@ -79,16 +104,83 @@ static void loadPrefs() {
 	if(lsBlur) {
 
 
-		_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+		switch(lsBlurType) {
 
-		_UIBackdropView *blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero
-		autosizesToFitSuperview:YES settings:settings];
-		blurView.blurRadiusSetOnce = NO;
-		blurView._blurRadius = 80.0;
-		blurView._blurQuality = @"high";
-		blurView.alpha = 0.95;
-		[self.view insertSubview:blurView atIndex:0];
 
+			case 1:
+
+				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+				break;
+
+
+			case 2:
+
+				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+				break;
+
+
+			case 3:
+
+				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
+				break;
+
+
+			case 4:
+
+				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemThinMaterial];
+				break;
+
+
+			case 5:
+
+				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemUltraThinMaterial];
+				break;
+
+
+			case 6:
+
+				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemChromeMaterial];
+				break;
+
+
+			default:
+    	
+				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+				break;
+
+
+		}
+
+
+		UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:lsBlurEffect];
+		blurEffectView.alpha = lsIntensity;
+		blurEffectView.frame = self.view.bounds;
+		blurEffectView.clipsToBounds = YES;
+		blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		[self.view insertSubview:blurEffectView atIndex:0];
+
+
+	}
+
+
+	if(!lsBlur) {
+
+
+		if(epicLSBlur) {
+
+
+			_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+
+			_UIBackdropView *blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero
+			autosizesToFitSuperview:YES settings:settings];
+			blurView.blurRadiusSetOnce = NO;
+			blurView._blurRadius = 80.0;
+			blurView._blurQuality = @"high";
+			blurView.alpha = epicLSBlurIntensity;
+			[self.view insertSubview:blurView atIndex:0];
+
+
+		}
 
 	}
 
@@ -163,7 +255,7 @@ static void loadPrefs() {
 
 
 		UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:hsBlurType];
-		blurEffectView.alpha = intensity;
+		blurEffectView.alpha = hsIntensity;
 		blurEffectView.frame = self.view.bounds;
 		blurEffectView.clipsToBounds = YES;
 		blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -176,7 +268,7 @@ static void loadPrefs() {
 	if(!hsBlur) {
 
 
-		if(epicBlur) {
+		if(epicHSBlur) {
 
 
 			_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
@@ -186,8 +278,9 @@ static void loadPrefs() {
 			blurView.blurRadiusSetOnce = NO;
 			blurView._blurRadius = 80.0;
 			blurView._blurQuality = @"high";
-			blurView.alpha = intensity;
+			blurView.alpha = epicHSBlurIntensity;
 			[self.view insertSubview:blurView atIndex:0];
+
 
 		}
 
@@ -203,14 +296,6 @@ static void loadPrefs() {
 
 %ctor {
 
-
-	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeThere];
-	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
-	lsBlur = prefs[@"lsBlur"] ? [prefs[@"lsBlur"] boolValue] : NO;
-	hsBlur = prefs[@"hsBlur"] ? [prefs[@"hsBlur"] boolValue] : NO;
-	epicBlur = prefs[@"epicBlur"] ? [prefs[@"epicBlur"] boolValue] : NO;
-	blurType = prefs[@"blurType"] ? [prefs[@"blurType"] integerValue] : 0;
-	intensity = prefs[@"intensity"] ? [prefs[@"intensity"] floatValue] : 1.0f;
-
+	loadPrefs();
 
 }
