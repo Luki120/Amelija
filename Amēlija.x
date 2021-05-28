@@ -73,7 +73,7 @@ static void loadPrefs() {
 
 	loadPrefs();
 
-    %orig;
+	%orig;
 
 
 	if(lsBlur) {
