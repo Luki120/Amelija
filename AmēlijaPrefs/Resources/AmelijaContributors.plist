@@ -28,46 +28,6 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Wizard</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>cellClass</key>
-			<string>AmelijaTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>me.luki.amēlijaprefs</string>
-			<key>action</key>
-			<string>wizard</string>
-			<key>label</key>
-			<string>RuntimeOverflow</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Help With Specifiers</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>cellClass</key>
-			<string>AmelijaTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>me.luki.amēlijaprefs</string>
-			<key>action</key>
-			<string>miguelaka</string>
-			<key>label</key>
-			<string>Miguelaka95</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
 			<string>Epic Blur</string>
 		</dict>
 		<dict>
@@ -128,4 +88,4 @@
 	<key>title</key>
 	<string>Amēlija</string>
 </dict>
-</plist> 
+</plist>
