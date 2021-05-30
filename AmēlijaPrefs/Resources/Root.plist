@@ -5,10 +5,24 @@
 		<key>items</key>
 		<array>
 			<dict>
+				<key>cellClass</key>
+				<string>GcDuoTwitterCell</string>
+				<key>firstLabel</key>
+				<string>Luki120</string>
+				<key>firstAccount</key>
+				<string>Lukii120</string>
+				<key>firstURL</key>
+				<string>https://avatars.githubusercontent.com/u/74214115?v=4</string>
+				<key>secondLabel</key>
+				<string>Ben</string>
+				<key>secondAccount</key>
+				<string>BenOwl3</string>
+				<key>secondURL</key>
+				<string>https://pbs.twimg.com/profile_images/1388934413103161345/et7cnoR1_400x400.jpg</string>
+			</dict>
+			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
-				<key>label</key>
-				<string>Poggies</string>
 			</dict>
 			<dict>
 				<key>cell</key>
