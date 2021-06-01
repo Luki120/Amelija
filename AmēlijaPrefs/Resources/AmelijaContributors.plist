@@ -68,6 +68,26 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
+			<string>Help with specifiers</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>AmelijaTableCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>me.luki.amēlijaprefs</string>
+			<key>action</key>
+			<string>miguelaka</string>
+			<key>label</key>
+			<string>Miguelaka95</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
 			<string>Pretty Twitter Cells</string>
 		</dict>
 		<dict>
