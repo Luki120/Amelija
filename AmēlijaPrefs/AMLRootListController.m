@@ -77,7 +77,6 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
 	[super viewDidLoad];
-    //[self reloadSpecifiers];
 
 
  	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/hotbanner.png"];
@@ -217,9 +216,9 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 	if (!_specifiers) {
 
-		_specifiers = [self loadSpecifiersFromPlistName:@"LS" target:self];
+        _specifiers = [self loadSpecifiersFromPlistName:@"LS" target:self];
 
-        NSArray *chosenIDs = @[@"GroupCell-1", @"SliderCell-1", @"GroupCell-3", @"MiscLSBlursList", @"GroupCell-4", @"SliderCell-2"]; //@"GroupCell-5", @"SliderCell-3", @"GroupCell-6", @"GroupCell-7", @"MiscHSBlursList", @"MiscHSBlursList", @"GroupCell-8", @"SliderCell-4"];
+        NSArray *chosenIDs = @[@"GroupCell-1", @"SliderCell-1", @"GroupCell-3", @"MiscLSBlursList", @"GroupCell-4", @"SliderCell-2"];
         self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
         for(PSSpecifier *specifier in _specifiers) {
             if([chosenIDs containsObject:[specifier propertyForKey:@"id"]]) {
@@ -228,8 +227,8 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
         }
     }
 
-	return _specifiers;
-
+    return _specifiers;
+    
 }
 
 
@@ -367,9 +366,9 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 - (NSArray *)specifiers {
 
-	if (!_specifiers) {
+    if (!_specifiers) {
 
-		_specifiers = [self loadSpecifiersFromPlistName:@"HS" target:self];
+        _specifiers = [self loadSpecifiersFromPlistName:@"HS" target:self];
 
         NSArray *chosenIDs = @[@"GroupCell-5", @"SliderCell-3", @"GroupCell-6", @"GroupCell-7", @"MiscHSBlursList", @"MiscHSBlursList", @"GroupCell-8", @"SliderCell-4"];
         self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
@@ -378,10 +377,10 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
                 [self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
             }
         }
-	}
+    }
 
-	return _specifiers;
-
+    return _specifiers;
+    
 }
 
 
