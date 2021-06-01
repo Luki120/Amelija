@@ -214,7 +214,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 - (NSArray *)specifiers {
 
-	if (!_specifiers) {
+    if (!_specifiers) {
 
         _specifiers = [self loadSpecifiersFromPlistName:@"LS" target:self];
 
