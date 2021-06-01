@@ -23,6 +23,16 @@
 				<string>Epic Blur</string>
 				<key>PostNotification</key>
 				<string>me.luki.amēlijaprefs.loadPrefs</string>
+				<key>id</key>
+				<string>EpicHSBlurSwitch</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>This slider controls the intensity (alpha) of the blur</string>
+				<key>id</key>
+				<string>GroupCell-5</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -39,10 +49,14 @@
 				<real>1</real>
 				<key>showValue</key>
 				<true/>
+				<key>id</key>
+				<string>SliderCell-3</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell-6</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -57,10 +71,14 @@
 				<string>Misc Blurs</string>
 				<key>PostNotification</key>
 				<string>me.luki.amēlijaprefs.loadPrefs</string>
+				<key>id</key>
+				<string>MiscHSBlursSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell-7</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -69,6 +87,8 @@
 				<string>PSListItemsController</string>
 				<key>defaults</key>
 				<string>me.luki.amēlijaprefs</string>
+				<key>id</key>
+				<string>MiscHSBlursList</string>
 				<key>default</key>
 				<integer>0</integer>
 				<key>key</key>
@@ -99,6 +119,10 @@
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>This slider controls the intensity (alpha) of the blur</string>
+				<key>id</key>
+				<string>GroupCell-8</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -115,6 +139,8 @@
 				<real>1</real>
 				<key>showValue</key>
 				<true/>
+				<key>id</key>
+				<string>SliderCell-4</string>
 			</dict>
 		</array>
 		<key>title</key>
