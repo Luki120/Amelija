@@ -56,10 +56,12 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
 @interface CSCoverSheetViewController : UIViewController
+- (void)unleashThatLSBlur;
 @end
 
 
 @interface SBHomeScreenViewController : UIViewController
+- (void)unleashThatHSBlur;
 @end
 
 
@@ -94,12 +96,15 @@ static void loadPrefs() {
 %hook CSCoverSheetViewController
 
 
-- (void)viewDidLoad {
+%new
+
+
+- (void)unleashThatLSBlur {
 
 
 	loadPrefs();
 
-	%orig;
+	[[self.view viewWithTag:1337] removeFromSuperview];
 
 
 	if(lsBlur) {
@@ -154,6 +159,7 @@ static void loadPrefs() {
 
 
 		UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:lsBlurEffect];
+		blurEffectView.tag = 1337;
 		blurEffectView.alpha = lsIntensity;
 		blurEffectView.frame = self.view.bounds;
 		blurEffectView.clipsToBounds = YES;
@@ -177,6 +183,7 @@ static void loadPrefs() {
 			blurView.blurRadiusSetOnce = NO;
 			blurView._blurRadius = 80.0;
 			blurView._blurQuality = @"high";
+			blurView.tag = 1337;
 			blurView.alpha = epicLSBlurIntensity;
 			[self.view insertSubview:blurView atIndex:0];
 
@@ -184,6 +191,20 @@ static void loadPrefs() {
 		}
 
 	}
+
+}
+
+
+- (void)viewDidLoad {
+
+
+	%orig;
+
+	[self unleashThatLSBlur];
+
+	[[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
+	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(unleashThatLSBlur) name:@"lsBlurApplied" object:nil];
+
 
 }
 
@@ -196,12 +217,15 @@ static void loadPrefs() {
 %hook SBHomeScreenViewController
 
 
-- (void)viewDidLoad {
+%new
+
+
+- (void)unleashThatHSBlur {
 
 
 	loadPrefs();
 
-	%orig;
+	[[self.view viewWithTag:1337] removeFromSuperview];
 
 
 	if(hsBlur) {
@@ -256,6 +280,7 @@ static void loadPrefs() {
 
 
 		UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:hsBlurType];
+		blurEffectView.tag = 1337;
 		blurEffectView.alpha = hsIntensity;
 		blurEffectView.frame = self.view.bounds;
 		blurEffectView.clipsToBounds = YES;
@@ -264,6 +289,11 @@ static void loadPrefs() {
 
 
 	}
+
+
+	else
+
+		loadPrefs();
 
 
 	if(!hsBlur) {
@@ -279,6 +309,7 @@ static void loadPrefs() {
 			blurView.blurRadiusSetOnce = NO;
 			blurView._blurRadius = 80.0;
 			blurView._blurQuality = @"high";
+			blurView.tag = 1337;
 			blurView.alpha = epicHSBlurIntensity;
 			[self.view insertSubview:blurView atIndex:0];
 
@@ -286,6 +317,27 @@ static void loadPrefs() {
 		}
 
 	}
+
+
+	else
+
+
+		loadPrefs();
+
+
+}
+
+
+- (void)viewDidLoad {
+
+
+	%orig;
+
+	[self unleashThatHSBlur];
+
+	[[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
+	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(unleashThatHSBlur) name:@"hsBlurApplied" object:nil];
+
 
 }
 

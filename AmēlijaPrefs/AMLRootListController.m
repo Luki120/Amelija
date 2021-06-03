@@ -6,7 +6,7 @@
 // LS 
 
 
-static BOOL lsBlur;
+/*static BOOL lsBlur;
 static BOOL epicLSBlur;
 
 static int lsBlurType;
@@ -28,7 +28,7 @@ static int blurType;
 float hsIntensity = 1.0f;
 float epicHSBlurIntensity = 1.0f;
 
-UIBlurEffect* hsBlurType;
+UIBlurEffect* hsBlurType;*/
 
 
 static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
@@ -40,7 +40,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 @implementation AMLRootListController
 
 
-- (void)loadPrefs {
+/*- (void)loadPrefs {
 
 
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeThere];
@@ -57,7 +57,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 	epicHSBlurIntensity = prefs[@"epicHSBlurIntensity"] ? [prefs[@"epicHSBlurIntensity"] floatValue] : 1.0f;
 
 
-}
+}*/
 
 
 - (NSArray *)specifiers {
@@ -95,7 +95,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 	changelogButton.frame = CGRectMake(0,0,30,30);
 	changelogButton.layer.cornerRadius = changelogButton.frame.size.height / 2;
 	changelogButton.layer.masksToBounds = YES;
-	[changelogButton setImage:[UIImage systemImageNamed:@"checkmark.circle"] forState:UIControlStateNormal];
+	[changelogButton setImage:[UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
 	[changelogButton addTarget:self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
 	changelogButton.tintColor = [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00];
 
@@ -193,13 +193,16 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
     [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
     [settings setObject:value forKey:specifier.properties[@"key"]];
     [settings writeToFile:takeMeThere atomically:YES];
-	CFStringRef notificationName = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
+	/*CFStringRef notificationName = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
 
 	if (notificationName) {
 
 		[self loadPrefs];
 		
-	}
+	}*/
+
+    //[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"lsBlurApplied" object:nil];
+    //[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"hsBlurApplied" object:nil];
 
 }
 
@@ -301,6 +304,8 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
     [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
     [settings setObject:value forKey:specifier.properties[@"key"]];
     [settings writeToFile:takeMeThere atomically:YES];
+
+    [NSDistributedNotificationCenter.defaultCenter postNotificationName:@"lsBlurApplied" object:nil];
 
 
     NSString *key = [specifier propertyForKey:@"key"];
@@ -453,6 +458,8 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
     [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
     [settings setObject:value forKey:specifier.properties[@"key"]];
     [settings writeToFile:takeMeThere atomically:YES];
+
+    [NSDistributedNotificationCenter.defaultCenter postNotificationName:@"hsBlurApplied" object:nil];
 
 
     NSString *key = [specifier propertyForKey:@"key"];
