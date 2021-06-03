@@ -3,34 +3,6 @@
 
 
 
-// LS 
-
-
-/*static BOOL lsBlur;
-static BOOL epicLSBlur;
-
-static int lsBlurType;
-
-float lsIntensity = 1.0f;
-float epicLSBlurIntensity = 1.0f;
-
-UIBlurEffect* lsBlurEffect;
-
-
-// HS
-
-
-static BOOL hsBlur;
-static BOOL epicHSBlur;
-
-static int blurType;
-
-float hsIntensity = 1.0f;
-float epicHSBlurIntensity = 1.0f;
-
-UIBlurEffect* hsBlurType;*/
-
-
 static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
 
 #define tint [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00]
@@ -38,26 +10,6 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
 @implementation AMLRootListController
-
-
-/*- (void)loadPrefs {
-
-
-	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeThere];
-	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
-	lsBlur = prefs[@"lsBlur"] ? [prefs[@"lsBlur"] boolValue] : NO;
-	epicLSBlur = prefs[@"epicLSBlur"] ? [prefs[@"epicLSBlur"] boolValue] : NO;
-	lsBlurType = prefs[@"lsBlurType"] ? [prefs[@"lsBlurType"] integerValue] : 0;
-	lsIntensity = prefs[@"lsIntensity"] ? [prefs[@"lsIntensity"] floatValue] : 1.0f;
-	epicLSBlurIntensity = prefs[@"epicLSBlurIntensity"] ? [prefs[@"epicLSBlurIntensity"] floatValue] : 1.0f;
-	hsBlur = prefs[@"hsBlur"] ? [prefs[@"hsBlur"] boolValue] : NO;
-	epicHSBlur = prefs[@"epicHSBlur"] ? [prefs[@"epicHSBlur"] boolValue] : NO;
-	blurType = prefs[@"blurType"] ? [prefs[@"blurType"] integerValue] : 0;
-	hsIntensity = prefs[@"hsIntensity"] ? [prefs[@"hsIntensity"] floatValue] : 1.0f;
-	epicHSBlurIntensity = prefs[@"epicHSBlurIntensity"] ? [prefs[@"epicHSBlurIntensity"] floatValue] : 1.0f;
-
-
-}*/
 
 
 - (NSArray *)specifiers {
@@ -125,7 +77,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
     self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/HotIcon.png"]];
 
-    [self.changelogController addBulletedListItemWithTitle:@"Initial Release" description:@"" image:[UIImage systemImageNamed:@"exclamationmark.circle.fill"]];
+    [self.changelogController addBulletedListItemWithTitle:@"Initial Release" description:@"" image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
   
     //[self.changelogController addBulletedListItemWithTitle:@"Is" description:@"Fucking Hot" image:[UIImage systemImageNamed:@"exclamationmark.circle.fill"]];
 
@@ -193,16 +145,6 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
     [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
     [settings setObject:value forKey:specifier.properties[@"key"]];
     [settings writeToFile:takeMeThere atomically:YES];
-	/*CFStringRef notificationName = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
-
-	if (notificationName) {
-
-		[self loadPrefs];
-		
-	}*/
-
-    //[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"lsBlurApplied" object:nil];
-    //[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"hsBlurApplied" object:nil];
 
 }
 

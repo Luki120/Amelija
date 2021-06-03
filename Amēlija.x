@@ -291,11 +291,6 @@ static void loadPrefs() {
 	}
 
 
-	else
-
-		loadPrefs();
-
-
 	if(!hsBlur) {
 
 
@@ -317,13 +312,6 @@ static void loadPrefs() {
 		}
 
 	}
-
-
-	else
-
-
-		loadPrefs();
-
 
 }
 
