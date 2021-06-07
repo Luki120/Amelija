@@ -29,7 +29,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
 	[super viewDidLoad];
-
+    
 
  	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/hotbanner.png"];
 
@@ -56,6 +56,14 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 	self.navigationItem.rightBarButtonItem = changelogButtonItem;
 
+    self.navigationItem.titleView = [UIView new];
+    self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
+    self.iconView.contentMode = UIViewContentModeScaleAspectFit;
+    self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/icon@2x.png"];
+    self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.iconView.alpha = 1.0;
+    [self.navigationItem.titleView addSubview:self.iconView];
+
 
 	[NSLayoutConstraint activateConstraints:@[
 
@@ -63,6 +71,10 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
         [self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
         [self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],   
         [self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
+        [self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
+        [self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
+        [self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
+        [self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
 
 	]];
 
@@ -299,6 +311,25 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
             [self insertSpecifier:self.savedSpecifiers[@"SliderCell-2"] afterSpecifierID:@"GroupCell-4" animated:YES];
 
         }
+
+    }
+
+
+    if([specifier.properties[@"id"] isEqualToString:@"MiscLSBlursSwitch"]) {
+
+
+        PSSpecifier *EpicLSBlurSwitch = [self specifierForID:@"EpicLSBlurSwitch"];
+        [EpicLSBlurSwitch setProperty:@(![value boolValue]) forKey:@"epicLSBlur"];
+        [self reloadSpecifier:EpicLSBlurSwitch animated:true];
+
+    }
+
+
+    if([specifier.properties[@"id"] isEqualToString:@"EpicLSBlurSwitch"]) {
+
+        PSSpecifier *MiscLSBlursSwitch = [self specifierForID:@"MiscLSBlursSwitch"];
+        [MiscLSBlursSwitch setProperty:@(![value boolValue]) forKey:@"MiscLSBlursSwitch"];
+        [self reloadSpecifier:MiscLSBlursSwitch animated:true];
 
     }
 

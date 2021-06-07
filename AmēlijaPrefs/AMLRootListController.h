@@ -4,7 +4,6 @@
 #import <AudioToolbox/AudioServices.h>
 
 
-
 @interface OBButtonTray : UIView
 @property (nonatomic,retain) UIVisualEffectView * effectView;
 - (void)addButton:(id)arg1;
@@ -62,10 +61,10 @@ UIBarButtonItem *changelogButtonItem;
 
 }
 @property (nonatomic, retain) UIView *headerView;
+@property (nonatomic, retain) UIImageView *iconView;
 @property (nonatomic, retain) UIImageView *headerImageView;
 @property (nonatomic, retain) OBWelcomeController *changelogController;
 - (void)showWtfChangedInThisVersion:(UIButton *)sender;
-//- (void)loadPrefs;
 @end
 
 
