@@ -54,15 +54,14 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 	changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
 
-    self.navigationItem.rightBarButtonItem = changelogButtonItem;
-
-    self.navigationItem.titleView = [UIView new];
-    self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
-    self.iconView.contentMode = UIViewContentModeScaleAspectFit;
-    self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/icon@2x.png"];
-    self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.iconView.alpha = 1.0;
-    [self.navigationItem.titleView addSubview:self.iconView];
+	self.navigationItem.rightBarButtonItem = changelogButtonItem;
+	self.navigationItem.titleView = [UIView new];
+    	self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
+    	self.iconView.contentMode = UIViewContentModeScaleAspectFit;
+    	self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/icon@2x.png"];
+    	self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
+    	self.iconView.alpha = 1.0;
+    	[self.navigationItem.titleView addSubview:self.iconView];
 
 
 	[NSLayoutConstraint activateConstraints:@[
