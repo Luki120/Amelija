@@ -29,7 +29,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
 	[super viewDidLoad];
-    
+
 
  	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/hotbanner.png"];
 
@@ -54,7 +54,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 	changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
 
-	self.navigationItem.rightBarButtonItem = changelogButtonItem;
+    self.navigationItem.rightBarButtonItem = changelogButtonItem;
 
     self.navigationItem.titleView = [UIView new];
     self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
@@ -311,25 +311,6 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
             [self insertSpecifier:self.savedSpecifiers[@"SliderCell-2"] afterSpecifierID:@"GroupCell-4" animated:YES];
 
         }
-
-    }
-
-
-    if([specifier.properties[@"id"] isEqualToString:@"MiscLSBlursSwitch"]) {
-
-
-        PSSpecifier *EpicLSBlurSwitch = [self specifierForID:@"EpicLSBlurSwitch"];
-        [EpicLSBlurSwitch setProperty:@(![value boolValue]) forKey:@"epicLSBlur"];
-        [self reloadSpecifier:EpicLSBlurSwitch animated:true];
-
-    }
-
-
-    if([specifier.properties[@"id"] isEqualToString:@"EpicLSBlurSwitch"]) {
-
-        PSSpecifier *MiscLSBlursSwitch = [self specifierForID:@"MiscLSBlursSwitch"];
-        [MiscLSBlursSwitch setProperty:@(![value boolValue]) forKey:@"MiscLSBlursSwitch"];
-        [self reloadSpecifier:MiscLSBlursSwitch animated:true];
 
     }
 
