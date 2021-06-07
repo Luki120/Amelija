@@ -66,14 +66,14 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 	[NSLayoutConstraint activateConstraints:@[
 
-        [self.headerImageView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
-        [self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
-        [self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],   
-        [self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
-        [self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
-        [self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
-        [self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
-        [self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
+        	[self.headerImageView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
+        	[self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
+        	[self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],   
+        	[self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
+        	[self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
+        	[self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
+        	[self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
+        	[self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
 
 	]];
 
