@@ -10,23 +10,21 @@
 * Features:
 
 * Custom Blurs for your LockScreen.
-* Custom Blurs for your HomeScreen.
+* Custom Blurs for your HomeScreen. <br />
 <br />
-<br />
-* Types:
-<br />
-* Epic Blur.
-<br />
-* Miscellaneous:
-<br />
+* Types: <br />
+
+* Epic Blur.<br />
+
+* Miscellaneous: <br />
+
 * Dark.
 * Light.
 * Adaptive.
 * Promiment.
 * System Thin Material.
 * System Chrome Material.
-* System Ultra Thin Material.
-<br />
+* System Ultra Thin Material. <br />
 <br />
 * [Twitter](https://twitter.com/Lukii120)
 * [Support on Discord](https://discord.gg/2y5uWhhNJu)
