@@ -1,9 +1,12 @@
 Package: me.luki.amelija
 Name: Amēlija
-Version: 0.9.8
+Version: 1.0
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: Take full control of your wallpapers
 Maintainer: Luki
 Author: Luki
 Section: Tweaks
-Depends: mobilesubstrate, preferenceloader
+Depends: mobilesubstrate, preferenceloader, com.mrgcgamer.libgcuniversal
+Icon: https://raw.githubusercontent.com/Luki120/luki120.github.io/master/assets/Amēlija/Amēlija.png
+Depiction: https://luki120.github.io/depictions/web/?p=me.luki.amelija
+SileoDepiction: https://luki120.github.io/depictions/native/me.luki.amelija/depiction.json
