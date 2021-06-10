@@ -32,7 +32,7 @@
 				<key>isController</key>
 				<true/>
 				<key>label</key>
-				<string>LS</string>
+				<string>LockScreen</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -42,7 +42,7 @@
 				<key>isController</key>
 				<true/>
 				<key>label</key>
-				<string>HS</string>
+				<string>HomeScreen</string>
 			</dict>
 			<dict>
 				<key>cell</key>
