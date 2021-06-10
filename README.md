@@ -2,22 +2,19 @@
 
 # Amēlija
 
-## Take full control of your wallpapers and blur them to your liking!
-
 ## On the fly preferences.
 
-
-* Features:
+### Features:
 
 * Custom Blurs for your LockScreen.
 * Custom Blurs for your HomeScreen.
 
 
-* Types:
+### Types:
 
-* Epic Blur.
+*  Epic Blur.
 
-* Miscellaneous:
+###  Miscellaneous:
 
 * Dark.
 * Light.
@@ -26,6 +23,8 @@
 * System Thin Material.
 * System Chrome Material.
 * System Ultra Thin Material.
+
+###  Socials:
 
 * [Twitter](https://twitter.com/Lukii120)
 * [Support on Discord](https://discord.gg/2y5uWhhNJu)
