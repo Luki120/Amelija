@@ -547,51 +547,6 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 }
 
 
-- (void)luki {
-
-
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://twitter.com/Lukii120"] options:@{} completionHandler:nil];
-
-
-}
-
-
-- (void)ethn {
-
-
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://twitter.com/ethanwhited"] options:@{} completionHandler:nil];
-
-
-}
-
-
-- (void)ben {
-
-
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://twitter.com/BenOwl3"] options:@{} completionHandler:nil];
-
-
-}
-
-
-- (void)miguelaka {
-
-
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://www.reddit.com/user/Miguelaka95/"] options:@{} completionHandler:nil];
-
-
-}
-
-
-- (void)GCGamer {
-
-
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://twitter.com/mrgcgamer"] options:@{} completionHandler:nil];
-
-
-}
-
-
 @end
 
 
