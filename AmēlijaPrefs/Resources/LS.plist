@@ -18,6 +18,18 @@
 				<key>defaults</key>
 				<string>me.luki.amēlijaprefs</string>
 				<key>key</key>
+				<string>blurIfNotifs</string>
+				<key>label</key>
+				<string>Blur Notif Test</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false/>
+				<key>defaults</key>
+				<string>me.luki.amēlijaprefs</string>
+				<key>key</key>
 				<string>epicLSBlur</string>
 				<key>label</key>
 				<string>Epic Blur</string>

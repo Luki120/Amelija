@@ -8,6 +8,7 @@
 
 static BOOL lsBlur;
 static BOOL epicLSBlur;
+static BOOL blurIfNotifs;
 
 static int lsBlurType;
 
@@ -29,6 +30,9 @@ float hsIntensity = 1.0f;
 float epicHSBlurIntensity = 1.0f;
 
 UIBlurEffect* hsBlurType;
+
+
+static int notificationCount;
 
 
 static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
@@ -56,6 +60,8 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 @interface CSCoverSheetViewController : UIViewController
 - (void)unleashThatLSBlur;
+- (void)showBlurIfNotifsPresent;
+@property (nonatomic, strong) UIView *testView;
 @end
 
 
@@ -75,6 +81,7 @@ static void loadPrefs() {
 	
 	lsBlur = prefs[@"lsBlur"] ? [prefs[@"lsBlur"] boolValue] : NO;
 	epicLSBlur = prefs[@"epicLSBlur"] ? [prefs[@"epicLSBlur"] boolValue] : NO;
+	blurIfNotifs = prefs[@"blurIfNotifs"] ? [prefs[@"blurIfNotifs"] boolValue] : NO;
 	lsBlurType = prefs[@"lsBlurType"] ? [prefs[@"lsBlurType"] integerValue] : 0;
 	lsIntensity = prefs[@"lsIntensity"] ? [prefs[@"lsIntensity"] floatValue] : 1.0f;
 	epicLSBlurIntensity = prefs[@"epicLSBlurIntensity"] ? [prefs[@"epicLSBlurIntensity"] floatValue] : 1.0f;
@@ -92,10 +99,31 @@ static void loadPrefs() {
 
 
 
+%hook NCNotificationMasterList
+
+
+- (unsigned long long)notificationCount { // get notifications count
+
+
+    notificationCount = %orig;
+
+    return notificationCount;
+
+}
+
+
+%end
+
+
+
+
 %hook CSCoverSheetViewController
 
 
 %new
+
+
+
 
 
 - (void)unleashThatLSBlur {
@@ -163,7 +191,7 @@ static void loadPrefs() {
 		blurEffectView.frame = self.view.bounds;
 		blurEffectView.clipsToBounds = YES;
 		blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[self.view insertSubview:blurEffectView atIndex:0];
+		[self.view insertSubview:blurEffectView atIndex:1];
 
 
 	}
@@ -184,10 +212,40 @@ static void loadPrefs() {
 			blurView._blurQuality = @"high";
 			blurView.tag = 1337;
 			blurView.alpha = epicLSBlurIntensity;
-			[self.view insertSubview:blurView atIndex:0];
+			[self.view insertSubview:blurView atIndex:1];
 
 
 		}
+
+	}
+
+}
+
+
+%new
+
+
+%property (nonatomic, strong) UIView *testView;
+
+
+- (void)showBlurIfNotifsPresent {
+
+
+	loadPrefs();
+
+	[[self.view viewWithTag:120] removeFromSuperview];
+
+
+	if((blurIfNotifs) && (notificationCount > 0)) {
+
+
+		self.testView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
+		self.testView.tag = 120;
+		self.testView.backgroundColor = [UIColor redColor];
+
+
+		[self.view addSubview: self.testView];
+
 
 	}
 
@@ -199,10 +257,14 @@ static void loadPrefs() {
 
 	%orig;
 
+
 	[self unleashThatLSBlur];
+	[self showBlurIfNotifsPresent];
+
 
 	[[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(unleashThatLSBlur) name:@"lsBlurApplied" object:nil];
+	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(showBlurIfNotifsPresent) name:@"notifArrivedSoApplyingBlurNow" object:nil];
 
 
 }

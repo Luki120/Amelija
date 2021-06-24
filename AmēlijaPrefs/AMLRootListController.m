@@ -259,7 +259,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
     [settings writeToFile:takeMeThere atomically:YES];
 
     [NSDistributedNotificationCenter.defaultCenter postNotificationName:@"lsBlurApplied" object:nil];
-
+    [NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
 
     NSString *key = [specifier propertyForKey:@"key"];
 
