@@ -32,7 +32,7 @@ float epicHSBlurIntensity = 1.0f;
 UIBlurEffect* hsBlurType;
 
 
-static int notificationCount;
+int notificationCount = 0;
 
 
 static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
@@ -121,9 +121,6 @@ static void loadPrefs() {
 
 
 %new
-
-
-
 
 
 - (void)unleashThatLSBlur {
