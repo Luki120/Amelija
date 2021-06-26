@@ -58,7 +58,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
 @interface CSCoverSheetViewController : UIViewController
-@property (nonatomic, strong) _UIBackdropView *blurView;
+@property (nonatomic, strong) UIView *blurView;
 - (void)unleashThatLSBlur;
 - (void)showBlurIfNotifsPresent;
 @end
@@ -122,7 +122,7 @@ static void loadPrefs() {
 %hook CSCoverSheetViewController
 
 
-%property (nonatomic, strong) _UIBackdropView *blurView;
+%property (nonatomic, strong) UIView *blurView;
 
 
 %new
@@ -195,27 +195,25 @@ static void loadPrefs() {
 		blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.view insertSubview:blurEffectView atIndex:0];
 
-
+		self.blurView = blurEffectView;
 	}
 
 
-	if(!(lsBlur) && (epicLSBlur) && (self.blurView == nil)) {
-
-
+	else if(epicLSBlur) {
 		_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
-		self.blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero
-		autosizesToFitSuperview:YES settings:settings];
-		self.blurView.blurRadiusSetOnce = NO;
-		self.blurView._blurRadius = 80.0;
-		self.blurView._blurQuality = @"high";
-		self.blurView.tag = 1337;
-		self.blurView.alpha = epicLSBlurIntensity;
-		[self.view insertSubview:self.blurView atIndex:0];
-
-
+		_UIBackdropView *blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
+		blurView.blurRadiusSetOnce = NO;
+		blurView._blurRadius = 80.0;
+		blurView._blurQuality = @"high";
+		blurView.tag = 1337;
+		blurView.alpha = epicLSBlurIntensity;
+		[self.view insertSubview:blurView atIndex:0];
+		
+		self.blurView = blurView;
 	}
-
+	
+	if(self.blurView) [self showBlurIfNotifsPresent];
 }
 
 
@@ -223,30 +221,16 @@ static void loadPrefs() {
 
 
 - (void)showBlurIfNotifsPresent {
-
+	
 
 	loadPrefs();
-
-
-	if((blurIfNotifs) && (notificationCount > 0)) {
-
-
-		//if(self.blurView != nil) {
-
-
-			self.blurView.hidden = NO;
-			[self.view insertSubview:self.blurView atIndex:0];
-
-
-		//}
-
-
-	}	
-
-
-	else if (notificationCount == 0) self.blurView.hidden = YES;
-
-
+	
+	if(!blurIfNotifs){
+		self.blurView.hidden = NO;
+	} else {
+		if(notificationCount > 0) self.blurView.hidden = NO;
+		else self.blurView.hidden = YES;
+	}
 }
 
 
@@ -257,7 +241,6 @@ static void loadPrefs() {
 
 
 	[self unleashThatLSBlur];
-	[self showBlurIfNotifsPresent];
 
 
 	[[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
