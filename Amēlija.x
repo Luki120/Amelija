@@ -199,8 +199,8 @@ static void loadPrefs() {
 	}
 
 
-	if(!(lsBlur) && (epicLSBlur) && (self.blurView == nil)) {
-
+	if(!(lsBlur) && (epicLSBlur) /*&& (self.blurView == nil)*/) {
+	
 
 		_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
@@ -231,14 +231,14 @@ static void loadPrefs() {
 	if((blurIfNotifs) && (notificationCount > 0)) {
 
 
-		//if(self.blurView != nil) {
+		if(self.blurView != nil) {
 
 
 			self.blurView.hidden = NO;
 			[self.view insertSubview:self.blurView atIndex:0];
 
 
-		//}
+		}
 
 
 	}	
