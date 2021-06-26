@@ -20,7 +20,11 @@
 				<key>key</key>
 				<string>blurIfNotifs</string>
 				<key>label</key>
-				<string>Blur Notif Test</string>
+				<string>Blur Only With Notifs</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
 			</dict>
 			<dict>
 				<key>cell</key>

@@ -17,6 +17,8 @@ float epicLSBlurIntensity = 1.0f;
 
 UIBlurEffect* lsBlurEffect;
 
+int notificationCount = 0;
+
 
 // HS
 
@@ -30,9 +32,6 @@ float hsIntensity = 1.0f;
 float epicHSBlurIntensity = 1.0f;
 
 UIBlurEffect* hsBlurType;
-
-
-int notificationCount = 0;
 
 
 static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
@@ -59,9 +58,9 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
 @interface CSCoverSheetViewController : UIViewController
+@property (nonatomic, strong) _UIBackdropView *blurView;
 - (void)unleashThatLSBlur;
 - (void)showBlurIfNotifsPresent;
-@property (nonatomic, strong) UIView *testView;
 @end
 
 
@@ -105,9 +104,12 @@ static void loadPrefs() {
 - (unsigned long long)notificationCount { // get notifications count
 
 
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+
     notificationCount = %orig;
 
     return notificationCount;
+
 
 }
 
@@ -118,6 +120,9 @@ static void loadPrefs() {
 
 
 %hook CSCoverSheetViewController
+
+
+%property (nonatomic, strong) _UIBackdropView *blurView;
 
 
 %new
@@ -188,31 +193,26 @@ static void loadPrefs() {
 		blurEffectView.frame = self.view.bounds;
 		blurEffectView.clipsToBounds = YES;
 		blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[self.view insertSubview:blurEffectView atIndex:1];
+		[self.view insertSubview:blurEffectView atIndex:0];
 
 
 	}
 
 
-	if(!lsBlur) {
+	if(!(lsBlur) && (epicLSBlur) && (self.blurView == nil)) {
 
 
-		if(epicLSBlur) {
+		_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
+		self.blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero
+		autosizesToFitSuperview:YES settings:settings];
+		self.blurView.blurRadiusSetOnce = NO;
+		self.blurView._blurRadius = 80.0;
+		self.blurView._blurQuality = @"high";
+		self.blurView.tag = 1337;
+		self.blurView.alpha = epicLSBlurIntensity;
+		[self.view insertSubview:self.blurView atIndex:0];
 
-			_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
-
-			_UIBackdropView *blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero
-			autosizesToFitSuperview:YES settings:settings];
-			blurView.blurRadiusSetOnce = NO;
-			blurView._blurRadius = 80.0;
-			blurView._blurQuality = @"high";
-			blurView.tag = 1337;
-			blurView.alpha = epicLSBlurIntensity;
-			[self.view insertSubview:blurView atIndex:1];
-
-
-		}
 
 	}
 
@@ -222,29 +222,30 @@ static void loadPrefs() {
 %new
 
 
-%property (nonatomic, strong) UIView *testView;
-
-
 - (void)showBlurIfNotifsPresent {
 
 
 	loadPrefs();
 
-	[[self.view viewWithTag:120] removeFromSuperview];
-
 
 	if((blurIfNotifs) && (notificationCount > 0)) {
 
 
-		self.testView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
-		self.testView.tag = 120;
-		self.testView.backgroundColor = [UIColor redColor];
+		//if(self.blurView != nil) {
 
 
-		[self.view addSubview: self.testView];
+			self.blurView.hidden = NO;
+			[self.view insertSubview:self.blurView atIndex:0];
 
 
-	}
+		//}
+
+
+	}	
+
+
+	else if (notificationCount == 0) self.blurView.hidden = YES;
+
 
 }
 
@@ -349,25 +350,20 @@ static void loadPrefs() {
 	}
 
 
-	if(!hsBlur) {
+	if(!(hsBlur) && (epicHSBlur)) {
 
 
-		if(epicHSBlur) {
+		_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
+		_UIBackdropView *blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero
+		autosizesToFitSuperview:YES settings:settings];
+		blurView.blurRadiusSetOnce = NO;
+		blurView._blurRadius = 80.0;
+		blurView._blurQuality = @"high";
+		blurView.tag = 1337;
+		blurView.alpha = epicHSBlurIntensity;
+		[self.view insertSubview:blurView atIndex:0];
 
-			_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
-
-			_UIBackdropView *blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero
-			autosizesToFitSuperview:YES settings:settings];
-			blurView.blurRadiusSetOnce = NO;
-			blurView._blurRadius = 80.0;
-			blurView._blurQuality = @"high";
-			blurView.tag = 1337;
-			blurView.alpha = epicHSBlurIntensity;
-			[self.view insertSubview:blurView atIndex:0];
-
-
-		}
 
 	}
 
