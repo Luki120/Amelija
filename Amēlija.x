@@ -106,9 +106,9 @@ static void loadPrefs() {
 
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
 
-    notificationCount = %orig;
+	notificationCount = %orig;
 
-    return notificationCount;
+	return notificationCount;
 
 
 }
