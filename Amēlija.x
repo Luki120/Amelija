@@ -128,7 +128,7 @@ static void loadPrefs() {
 %new
 
 
-- (void)unleashThatLSBlur {
+- (void)unleashThatLSBlur { // self explanatory
 
 
 	loadPrefs();
@@ -196,8 +196,12 @@ static void loadPrefs() {
 		[self.view insertSubview:blurEffectView atIndex:0];
 
 		self.blurView = blurEffectView;
+
+
 	}
 
+
+	else if(epicLSBlur) {
 
 
 		_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
@@ -211,24 +215,51 @@ static void loadPrefs() {
 		[self.view insertSubview:blurView atIndex:0];
 		
 		self.blurView = blurView;
+
+
 	}
+
 	
 	if(self.blurView) [self showBlurIfNotifsPresent];
+
+
 }
 
 
 %new
 
 
-- (void)showBlurIfNotifsPresent {
+- (void)showBlurIfNotifsPresent { // self explanatory
 	
 
 	loadPrefs();
 
+
+	if(!blurIfNotifs) self.blurView.hidden = NO; 
+
+
+	else {
+
+		if(notificationCount > 0) {
+
+			[UIView transitionWithView:self.blurView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+				self.blurView.hidden = NO;
+			} completion:nil];
+
+		} else { // broken for some reason smh
+
+			[UIView transitionWithView:self.blurView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+				self.blurView.hidden = YES;
+			} completion:nil];
+
+		}
+
+	}
+
 }
 
 
-- (void)viewDidLoad {
+- (void)viewDidLoad { // create notification observers
 
 
 	%orig;
@@ -256,7 +287,7 @@ static void loadPrefs() {
 %new
 
 
-- (void)unleashThatHSBlur {
+- (void)unleashThatHSBlur { // self explanatory
 
 
 	loadPrefs();
@@ -347,7 +378,7 @@ static void loadPrefs() {
 }
 
 
-- (void)viewDidLoad {
+- (void)viewDidLoad { // create notification observers
 
 
 	%orig;

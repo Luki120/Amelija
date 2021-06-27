@@ -18,22 +18,6 @@
 				<key>defaults</key>
 				<string>me.luki.amēlijaprefs</string>
 				<key>key</key>
-				<string>blurIfNotifs</string>
-				<key>label</key>
-				<string>Blur Only With Notifs</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>default</key>
-				<false/>
-				<key>defaults</key>
-				<string>me.luki.amēlijaprefs</string>
-				<key>key</key>
 				<string>epicLSBlur</string>
 				<key>label</key>
 				<string>Epic Blur</string>
@@ -153,6 +137,22 @@
 				<true/>
 				<key>id</key>
 				<string>SliderCell-2</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false/>
+				<key>defaults</key>
+				<string>me.luki.amēlijaprefs</string>
+				<key>key</key>
+				<string>blurIfNotifs</string>
+				<key>label</key>
+				<string>Blur Only With Notifs</string>
 			</dict>
 		</array>
 		<key>title</key>
