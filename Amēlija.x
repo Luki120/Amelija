@@ -240,16 +240,23 @@ static void loadPrefs() {
 
 	else {
 
-		if(notificationCount > 0) {
+ 		
+ 		if(notificationCount == 0) {
 
-			[UIView transitionWithView:self.blurView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-				self.blurView.hidden = NO;
+
+			[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+
+				self.blurView.alpha = 0;
+
 			} completion:nil];
 
-		} else { // broken for some reason smh
+		} else {
+
 
 			[UIView transitionWithView:self.blurView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-				self.blurView.hidden = YES;
+				
+				self.blurView.alpha = epicLSBlurIntensity;
+            
 			} completion:nil];
 
 		}
