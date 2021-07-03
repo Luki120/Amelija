@@ -68,7 +68,9 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)unleashThatHSBlur;
 @end
 
-
+@interface NCNotificationMasterList : NSObject
+@property(nonatomic, assign) NSInteger notificationCount;
+@end
 
 
 static void loadPrefs() {
@@ -100,19 +102,26 @@ static void loadPrefs() {
 
 %hook NCNotificationMasterList
 
-
-- (unsigned long long)notificationCount { // get notifications count
-
-
+-(void)removeNotificationRequest:(id)arg1{
+	%orig;
+	
+	notificationCount = [self notificationCount];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
-
-	notificationCount = %orig;
-
-	return notificationCount;
-
-
 }
 
+-(void)insertNotificationRequest:(id)arg1{
+	%orig;
+	
+	notificationCount = [self notificationCount];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+}
+
+-(void)modifyNotificationRequest:(id)arg1{
+	%orig;
+	
+	notificationCount = [self notificationCount];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+}
 
 %end
 
@@ -194,7 +203,9 @@ static void loadPrefs() {
 		blurEffectView.clipsToBounds = YES;
 		blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.view insertSubview:blurEffectView atIndex:0];
-
+		
+		if(blurIfNotifs && notificationCount == 0) blurEffectView.alpha = 0;
+		
 		self.blurView = blurEffectView;
 
 
@@ -214,6 +225,8 @@ static void loadPrefs() {
 		blurView.alpha = epicLSBlurIntensity;
 		[self.view insertSubview:blurView atIndex:0];
 		
+		if(blurIfNotifs && notificationCount == 0) blurView.alpha = 0;
+		
 		self.blurView = blurView;
 
 
@@ -225,7 +238,6 @@ static void loadPrefs() {
 
 }
 
-
 %new
 
 
@@ -235,15 +247,13 @@ static void loadPrefs() {
 	loadPrefs();
 
 
-	if(!blurIfNotifs) self.blurView.hidden = NO; 
+	if(!blurIfNotifs) self.blurView.alpha = epicLSBlur ? epicLSBlurIntensity : lsIntensity; 
 
 
 	else {
 
  		
  		if(notificationCount == 0) {
-
-
 			[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
 				self.blurView.alpha = 0;
@@ -255,7 +265,7 @@ static void loadPrefs() {
 
 			[UIView transitionWithView:self.blurView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 				
-				self.blurView.alpha = epicLSBlurIntensity;
+				self.blurView.alpha = epicLSBlur ? epicLSBlurIntensity : lsIntensity;
             
 			} completion:nil];
 
