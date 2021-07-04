@@ -102,25 +102,32 @@ static void loadPrefs() {
 
 %hook NCNotificationMasterList
 
--(void)removeNotificationRequest:(id)arg1{
+
+- (void)removeNotificationRequest:(id)arg1 { // get notification count in a reliable way
+
 	%orig;
 	
 	notificationCount = [self notificationCount];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+
 }
 
--(void)insertNotificationRequest:(id)arg1{
+- (void)insertNotificationRequest:(id)arg1 {
+	
 	%orig;
 	
 	notificationCount = [self notificationCount];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+
 }
 
--(void)modifyNotificationRequest:(id)arg1{
+- (void)modifyNotificationRequest:(id)arg1 {
+	
 	%orig;
 	
 	notificationCount = [self notificationCount];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+
 }
 
 %end
@@ -254,11 +261,14 @@ static void loadPrefs() {
 
  		
  		if(notificationCount == 0) {
+
+ 			
 			[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
 				self.blurView.alpha = 0;
 
 			} completion:nil];
+
 
 		} else {
 
