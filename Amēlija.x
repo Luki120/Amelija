@@ -18,6 +18,7 @@ float epicLSBlurIntensity = 1.0f;
 UIBlurEffect* lsBlurEffect;
 
 int notificationCount = 0;
+NSInteger axonCellCount;
 
 
 // HS
@@ -70,6 +71,10 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 @interface NCNotificationMasterList : NSObject
 @property(nonatomic, assign) NSInteger notificationCount;
+@end
+
+
+@interface AXNView : UIView
 @end
 
 
@@ -133,6 +138,34 @@ static void loadPrefs() {
 %end
 
 
+
+
+
+
+// Axon support smh, only because I love your creation Nepeta,
+// thank you so much for this gem. Hope you come back some day.
+
+/*
+
+%hook AXNView
+
+
+- (NSInteger)collectionView:(id)arg1 numberOfItemsInSection:(NSInteger)arg2 {
+
+
+	axonCellCount = %orig;
+
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+	
+	return axonCellCount;
+
+
+}
+
+
+%end
+
+*/
 
 
 %hook CSCoverSheetViewController
@@ -260,9 +293,10 @@ static void loadPrefs() {
 	else {
 
  		
- 		if(notificationCount == 0) {
+// 		if((notificationCount == 0) && (axonCellCount == 0)) {
+		if(notificationCount == 0) {	
+ 		
 
- 			
 			[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
 				self.blurView.alpha = 0;
@@ -291,9 +325,7 @@ static void loadPrefs() {
 
 	%orig;
 
-
 	[self unleashThatLSBlur];
-
 
 	[[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(unleashThatLSBlur) name:@"lsBlurApplied" object:nil];
