@@ -71,6 +71,8 @@
 			<string>april</string>
 			<key>label</key>
 			<string>April</string>
+			<key>icon</key>
+			<string>April@2x.png</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -85,9 +87,11 @@
 			<string>arizona</string>
 			<key>label</key>
 			<string>Arizona</string>
+			<key>icon</key>
+			<string>Arizona@2x.png</string>
 		</dict>
 	</array>
 	<key>title</key>
-	<string>April</string>
+	<string>Amēlija</string>
 </dict>
-</plist> 
+</plist>
