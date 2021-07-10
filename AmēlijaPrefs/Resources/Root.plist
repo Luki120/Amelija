@@ -79,6 +79,20 @@
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>action</key>
+				<string>shatterThePrefsToPieces</string>
+				<key>cell</key>
+				<string>PSButtonCell</string>
+				<key>cellClass</key>
+				<string>AmelijaTableCell</string>
+				<key>label</key>
+				<string>Reset Preferences</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
 				<key>footerAlignment</key>
 				<real>1</real>
 				<key>footerText</key>

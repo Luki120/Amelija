@@ -2,6 +2,7 @@
 #import <Preferences/PSSpecifier.h>
 #import <Preferences/PSTableCell.h>
 #import <AudioToolbox/AudioServices.h>
+#import <spawn.h>
 
 
 @interface OBButtonTray : UIView
@@ -65,6 +66,8 @@ UIBarButtonItem *changelogButtonItem;
 @property (nonatomic, retain) UIImageView *headerImageView;
 @property (nonatomic, retain) OBWelcomeController *changelogController;
 - (void)showWtfChangedInThisVersion:(UIButton *)sender;
+- (void)shatterThePrefsToPieces;
+- (void)respringMethod;
 @end
 
 

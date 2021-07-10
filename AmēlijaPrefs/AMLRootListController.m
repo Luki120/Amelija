@@ -88,9 +88,9 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
     self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.1" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/HotIcon.png"]];
 
-    [self.changelogController addBulletedListItemWithTitle:@"General" description:@"Added an option to only show the blur when a notification arrives, requested by @LobitaGault." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
+    [self.changelogController addBulletedListItemWithTitle:@"General" description:@"Added an option to only blur the LockScreen wallpaper when a notification arrives, transitioning the blur's alpha/intensity when you get one as well as when it's cleared. Requested by @LobitaGault." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
   
-    //[self.changelogController addBulletedListItemWithTitle:@"Is" description:@"Fucking Hot" image:[UIImage systemImageNamed:@"exclamationmark.circle.fill"]];
+    [self.changelogController addBulletedListItemWithTitle:@"Preferences" description:@"Added an option to reset preferences." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
 
     _UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
@@ -159,6 +159,49 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 }
 
+
+- (void)shatterThePrefsToPieces {
+
+
+    AudioServicesPlaySystemSound(1521);
+
+    UIAlertController* resetAlert = [UIAlertController alertControllerWithTitle:@"Amēlija"
+    message:@"Do you want to start fresh?"
+    preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+        
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+  
+    NSError *error;
+        
+    BOOL success = [fileManager removeItemAtPath:@"var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist" error:&error];
+        
+    if (success) [self respringMethod];
+        
+    }];
+
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Meh" style:UIAlertActionStyleCancel handler:nil];
+
+    [resetAlert addAction:confirmAction];
+    [resetAlert addAction:cancelAction];
+
+    [self presentViewController:resetAlert animated:YES completion:nil];
+
+
+}
+
+
+- (void)respringMethod {
+
+
+    pid_t pid;
+    const char* args[] = {"sbreload", NULL, NULL, NULL};
+    posix_spawn(&pid, "/usr/bin/sbreload", NULL, NULL, (char* const*)args, NULL);
+
+
+}
 
 @end
 
