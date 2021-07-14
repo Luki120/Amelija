@@ -4,6 +4,24 @@
 <dict>
 	<key>items</key>
 	<array>
+	<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Person with that name</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>GcTwitterCell</string>
+			<key>accountLabel</key>
+			<string>Amelia</string>
+			<key>account</key>
+			<string>Exerra</string>
+			<key>URL</key>
+			<string>https://cdn.exerra.xyz/files/png/pfp.png</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
