@@ -18,6 +18,7 @@ float epicLSBlurIntensity = 1.0f;
 UIBlurEffect* lsBlurEffect;
 
 int notificationCount = 0;
+NSInteger axonCellCount;
 
 
 // HS
@@ -73,13 +74,17 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 @end
 
 
+@interface AXNView : UIView
+@end
+
+
 static void loadPrefs() {
 
 
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeThere];
 	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
 
-	
+
 	lsBlur = prefs[@"lsBlur"] ? [prefs[@"lsBlur"] boolValue] : NO;
 	epicLSBlur = prefs[@"epicLSBlur"] ? [prefs[@"epicLSBlur"] boolValue] : NO;
 	blurIfNotifs = prefs[@"blurIfNotifs"] ? [prefs[@"blurIfNotifs"] boolValue] : NO;
@@ -100,31 +105,56 @@ static void loadPrefs() {
 
 
 
+// Axon support smh, only because I love your creation Nepeta,
+// thank you so much for this gem. Hope you come back some day.
+
+
+
+%hook AXNView
+
+
+- (NSInteger)collectionView:(id)arg1 numberOfItemsInSection:(NSInteger)arg2 {
+
+	axonCellCount = %orig;
+
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+
+	return axonCellCount;
+
+
+}
+
+
+%end
+
+
+
+
 %hook NCNotificationMasterList
 
 
 - (void)removeNotificationRequest:(id)arg1 { // get notification count in a reliable way
 
 	%orig;
-	
+
 	notificationCount = [self notificationCount];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
 
 }
 
 - (void)insertNotificationRequest:(id)arg1 {
-	
+
 	%orig;
-	
+
 	notificationCount = [self notificationCount];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
 
 }
 
 - (void)modifyNotificationRequest:(id)arg1 {
-	
+
 	%orig;
-	
+
 	notificationCount = [self notificationCount];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
 
@@ -195,7 +225,7 @@ static void loadPrefs() {
 
 
 			default:
-    	
+
 				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
 				break;
 
@@ -210,9 +240,9 @@ static void loadPrefs() {
 		blurEffectView.clipsToBounds = YES;
 		blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.view insertSubview:blurEffectView atIndex:0];
-		
+
 		if(blurIfNotifs && notificationCount == 0) blurEffectView.alpha = 0;
-		
+
 		self.blurView = blurEffectView;
 
 
@@ -226,20 +256,19 @@ static void loadPrefs() {
 
 		_UIBackdropView *blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
 		blurView.blurRadiusSetOnce = NO;
-		blurView._blurRadius = 80.0;
 		blurView._blurQuality = @"high";
 		blurView.tag = 1337;
 		blurView.alpha = epicLSBlurIntensity;
 		[self.view insertSubview:blurView atIndex:0];
-		
+
 		if(blurIfNotifs && notificationCount == 0) blurView.alpha = 0;
-		
+
 		self.blurView = blurView;
 
 
 	}
 
-	
+
 	if(self.blurView) [self showBlurIfNotifsPresent];
 
 
@@ -249,20 +278,20 @@ static void loadPrefs() {
 
 
 - (void)showBlurIfNotifsPresent { // self explanatory
-	
+
 
 	loadPrefs();
 
 
-	if(!blurIfNotifs) self.blurView.alpha = epicLSBlur ? epicLSBlurIntensity : lsIntensity; 
+	if(!blurIfNotifs) self.blurView.alpha = epicLSBlur ? epicLSBlurIntensity : lsIntensity;
 
 
 	else {
 
- 		
- 		if(notificationCount == 0) {
+ 		if((notificationCount == 0) && (axonCellCount == 0)) {
+// 		if(notificationCount == 0) {
 
- 			
+
 			[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
 				self.blurView.alpha = 0;
@@ -274,9 +303,9 @@ static void loadPrefs() {
 
 
 			[UIView transitionWithView:self.blurView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-				
+
 				self.blurView.alpha = epicLSBlur ? epicLSBlurIntensity : lsIntensity;
-            
+
 			} completion:nil];
 
 		}
@@ -365,7 +394,7 @@ static void loadPrefs() {
 
 
 			default:
-    	
+
 				hsBlurType = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
 				break;
 
