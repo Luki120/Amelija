@@ -12,13 +12,13 @@ static BOOL blurIfNotifs;
 
 static int lsBlurType;
 
-float lsIntensity = 1.0f;
-float epicLSBlurIntensity = 1.0f;
+static float lsIntensity = 1.0f;
+static float epicLSBlurIntensity = 1.0f;
 
-UIBlurEffect* lsBlurEffect;
+static UIBlurEffect* lsBlurEffect;
 
-int notificationCount = 0;
-NSInteger axonCellCount;
+static int notificationCount = 0;
+static NSInteger axonCellCount = 0;
 
 
 // HS
@@ -29,10 +29,10 @@ static BOOL epicHSBlur;
 
 static int blurType;
 
-float hsIntensity = 1.0f;
-float epicHSBlurIntensity = 1.0f;
+static float hsIntensity = 1.0f;
+static float epicHSBlurIntensity = 1.0f;
 
-UIBlurEffect* hsBlurType;
+static UIBlurEffect* hsBlurType;
 
 
 static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
@@ -110,12 +110,11 @@ static void loadPrefs() {
 
 
 
-%hook AXNView
+static NSInteger (*origNumberOfCells)(id self, SEL _cmd, id collectionView, NSInteger section);
 
+NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section){
 
-- (NSInteger)collectionView:(id)arg1 numberOfItemsInSection:(NSInteger)arg2 {
-
-	axonCellCount = %orig;
+	axonCellCount = origNumberOfCells(self, _cmd, collectionView, section);
 
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
 
@@ -124,9 +123,13 @@ static void loadPrefs() {
 
 }
 
+%hook SpringBoard
+-(void)applicationDidFinishLaunching:(id)app{
+	%orig;
 
+	MSHookMessageEx(%c(AXNView), @selector(collectionView:numberOfItemsInSection:), (IMP) &numberOfCells, (IMP *) &origNumberOfCells);
+}
 %end
-
 
 
 
@@ -282,9 +285,7 @@ static void loadPrefs() {
 
 	loadPrefs();
 
-
 	if(!blurIfNotifs) self.blurView.alpha = epicLSBlur ? epicLSBlurIntensity : lsIntensity;
-
 
 	else {
 
