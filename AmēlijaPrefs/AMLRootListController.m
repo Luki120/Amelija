@@ -17,7 +17,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 	if (!_specifiers) {
 
 		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
-		
+
 	}
 
 	return _specifiers;
@@ -68,7 +68,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
         	[self.headerImageView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
         	[self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
-        	[self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],   
+        	[self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],
         	[self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
         	[self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
         	[self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
@@ -83,14 +83,12 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
 - (void)showWtfChangedInThisVersion:(id)sender {
-    
+
     AudioServicesPlaySystemSound(1521);
 
-    self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.1" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/HotIcon.png"]];
+    self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.2" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/HotIcon.png"]];
 
-    [self.changelogController addBulletedListItemWithTitle:@"General" description:@"Added an option to only blur the LockScreen wallpaper when a notification arrives, transitioning the blur's alpha/intensity when you get one as well as when it's cleared. Requested by @LobitaGault." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
-  
-    [self.changelogController addBulletedListItemWithTitle:@"Preferences" description:@"Added an option to reset preferences." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
+    [self.changelogController addBulletedListItemWithTitle:@"General" description:@"Full seamless Axon compatibility support with the 'Blur With Notifs' option, cc: RuntimeOverflow for helping finish it." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
 
     _UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
@@ -99,7 +97,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
     backdropView.clipsToBounds = YES;
     backdropView.frame = self.changelogController.viewIfLoaded.frame;
     [self.changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
-    
+
     backdropView.translatesAutoresizingMaskIntoConstraints = NO;
     [backdropView.bottomAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.bottomAnchor constant:0].active = YES;
     [backdropView.leftAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.leftAnchor constant:0].active = YES;
@@ -168,18 +166,15 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
     UIAlertController* resetAlert = [UIAlertController alertControllerWithTitle:@"Amēlija"
     message:@"Do you want to start fresh?"
     preferredStyle:UIAlertControllerStyleAlert];
-    
+
     UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
-        
-    
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-  
-    NSError *error;
-        
-    BOOL success = [fileManager removeItemAtPath:@"var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist" error:&error];
-        
-    if (success) [self respringMethod];
-        
+
+		NSFileManager *fileManager = [NSFileManager defaultManager];
+
+		BOOL success = [fileManager removeItemAtPath:@"var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist" error:nil];
+
+		if(success) [self blurEffect];
+
     }];
 
     UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Meh" style:UIAlertActionStyleCancel handler:nil];
@@ -189,6 +184,30 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
     [self presentViewController:resetAlert animated:YES completion:nil];
 
+
+}
+
+
+- (void)blurEffect {
+
+	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+
+	_UIBackdropView *backdropView = [[_UIBackdropView alloc] initWithSettings:settings];
+	backdropView.layer.masksToBounds = YES;
+	backdropView.clipsToBounds = YES;
+	backdropView.alpha = 0;
+	backdropView.frame = self.view.bounds;
+	[self.view addSubview:backdropView];
+
+	[UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+
+		[backdropView setAlpha:1.0];
+
+	} completion:^(BOOL finished) {
+
+		[self respringMethod];
+
+	}];
 
 }
 
@@ -227,7 +246,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
     }
 
     return _specifiers;
-    
+
 }
 
 
@@ -309,7 +328,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
     if([key isEqualToString:@"epicLSBlur"]) {
 
-        
+
         if (![value boolValue]) {
 
 
@@ -333,7 +352,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
     if([key isEqualToString:@"lsBlur"]) {
-        
+
 
         if (![value boolValue]) {
 
@@ -343,7 +362,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
             [self removeSpecifier:self.savedSpecifiers[@"SliderCell-2"] animated:YES];
 
         }
-        
+
 
         else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell-3"]]) {
 
@@ -381,7 +400,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
     }
 
     return _specifiers;
-    
+
 }
 
 
@@ -463,7 +482,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
     if([key isEqualToString:@"epicHSBlur"]) {
 
-        
+
         if (![value boolValue]) {
 
 
@@ -485,7 +504,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
     if([key isEqualToString:@"hsBlur"]) {
-        
+
 
         if (![value boolValue]) {
 
@@ -495,7 +514,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
             [self removeSpecifier:self.savedSpecifiers[@"SliderCell-4"] animated:YES];
 
         }
-        
+
 
         else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell-7"]]) {
 
