@@ -44,6 +44,24 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
+			<string>Wizard &amp; Axon support help</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>GcTwitterCell</string>
+			<key>accountLabel</key>
+			<string>RuntimeOverflow</string>
+			<key>account</key>
+			<string>RuntimeOverflow</string>
+			<key>URL</key>
+			<string>https://avatars.githubusercontent.com/u/38386956?v=4</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
 			<string>Epic Blur</string>
 		</dict>
 		<dict>
