@@ -105,14 +105,26 @@ static void loadPrefs() {
 
 
 
-// Axon support smh, only because I love your creation Nepeta,
-// thank you so much for this gem. Hope you come back some day.
+/*
 
+
+Axon support smh, only because I love your creation Nepeta,
+thank you so much for this gem. Hope you come back some day.
+lmao I'm writing this like if she's ever gonna come here,
+anyways here's the magic, and we gotta do it kinda the old school way
+because otherwise due to Amēlija being alphabetically before Axon
+in the loading process, normal hooks loaded in the constructor wouldn't
+take any effect, so that's why we pass a message with MSHookMessageEx
+so we can control when to load it
+
+
+*/
 
 
 static NSInteger (*origNumberOfCells)(id self, SEL _cmd, id collectionView, NSInteger section);
 
-NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section){
+NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section) {
+
 
 	axonCellCount = origNumberOfCells(self, _cmd, collectionView, section);
 
@@ -123,13 +135,22 @@ NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section)
 
 }
 
-%hook SpringBoard
--(void)applicationDidFinishLaunching:(id)app{
-	%orig;
 
+%hook SpringBoard
+
+
+- (void)applicationDidFinishLaunching:(id)app {
+
+
+	%orig;
 	MSHookMessageEx(%c(AXNView), @selector(collectionView:numberOfItemsInSection:), (IMP) &numberOfCells, (IMP *) &origNumberOfCells);
+
+
 }
+
+
 %end
+
 
 
 
@@ -290,7 +311,6 @@ NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section)
 	else {
 
  		if((notificationCount == 0) && (axonCellCount == 0)) {
-// 		if(notificationCount == 0) {
 
 
 			[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
@@ -321,9 +341,7 @@ NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section)
 
 	%orig;
 
-
 	[self unleashThatLSBlur];
-
 
 	[[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(unleashThatLSBlur) name:@"lsBlurApplied" object:nil];
