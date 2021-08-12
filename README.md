@@ -4,17 +4,17 @@
 
 ## On the fly preferences.
 
-### Features:
+## Features:
 
 * Custom Blurs for your LockScreen.
 * Custom Blurs for your HomeScreen.
 
 
-### Types:
+## Types:
 
 *  Epic Blur.
 
-###  Miscellaneous:
+##  Miscellaneous:
 
 * Dark.
 * Light.
@@ -24,7 +24,7 @@
 * System Chrome Material.
 * System Ultra Thin Material.
 
-###  Socials:
+##  Socials:
 
 * [Twitter](https://twitter.com/Lukii120)
 * [Support on Discord](https://discord.gg/2y5uWhhNJu)
