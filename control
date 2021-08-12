@@ -2,11 +2,8 @@ Package: me.luki.amelija
 Name: Amēlija
 Version: 1.0.2
 Architecture: iphoneos-arm
-Description: Take full control of your wallpapers
+Description: Take full control of your wallpapers on the fly
 Maintainer: Luki
 Author: Luki
 Section: Tweaks
 Depends: mobilesubstrate, preferenceloader, com.mrgcgamer.libgcuniversal
-Icon: https://raw.githubusercontent.com/Luki120/luki120.github.io/master/assets/Amelija/Amelija.png
-Depiction: https://luki120.github.io/depictions/web/?p=me.luki.amelija
-SileoDepiction: https://luki120.github.io/depictions/native/me.luki.amelija/depiction.json
