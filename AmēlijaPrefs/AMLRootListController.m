@@ -1,24 +1,12 @@
 #include "AMLRootListController.h"
 
 
-
-
-static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
-
-#define tint [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00]
-
-
-
 @implementation AMLRootListController
 
 
 - (NSArray *)specifiers {
 
-	if (!_specifiers) {
-
-		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
-
-	}
+	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
 
 	return _specifiers;
 
@@ -31,49 +19,44 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 	[super viewDidLoad];
 
 
- 	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/hotbanner.png"];
+	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/hotbanner.png"];
 
 	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,UIScreen.mainScreen.bounds.size.width,UIScreen.mainScreen.bounds.size.width * banner.size.height / banner.size.width)];
-	self.headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,200,200)];
-	self.headerImageView.contentMode = UIViewContentModeScaleAspectFill;
+	self.headerImageView = [UIImageView new];
 	self.headerImageView.image = banner;
+	self.headerImageView.contentMode = UIViewContentModeScaleAspectFill;
 	self.headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-
-
 	[self.headerView addSubview:self.headerImageView];
-
 
 	UIButton *changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
 	changelogButton.frame = CGRectMake(0,0,30,30);
+	changelogButton.tintColor = [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00];
 	changelogButton.layer.cornerRadius = changelogButton.frame.size.height / 2;
 	changelogButton.layer.masksToBounds = YES;
 	[changelogButton setImage:[UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
 	[changelogButton addTarget:self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
-	changelogButton.tintColor = [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00];
-
 
 	changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
-
 	self.navigationItem.rightBarButtonItem = changelogButtonItem;
-	self.navigationItem.titleView = [UIView new];
-    	self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
-    	self.iconView.contentMode = UIViewContentModeScaleAspectFit;
-    	self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/icon@2x.png"];
-    	self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
-    	self.iconView.alpha = 1.0;
-    	[self.navigationItem.titleView addSubview:self.iconView];
 
+	self.navigationItem.titleView = [UIView new];
+	self.iconView = [UIImageView new];
+	self.iconView.alpha = 1;
+	self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/icon@2x.png"];
+	self.iconView.contentMode = UIViewContentModeScaleAspectFit;
+	self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.navigationItem.titleView addSubview:self.iconView];
 
 	[NSLayoutConstraint activateConstraints:@[
 
-        	[self.headerImageView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
-        	[self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
-        	[self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],
-        	[self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
-        	[self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
-        	[self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
-        	[self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
-        	[self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
+		[self.headerImageView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
+		[self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
+		[self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],
+		[self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
+		[self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
+		[self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
+		[self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
+		[self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
 
 	]];
 
@@ -84,46 +67,45 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 - (void)showWtfChangedInThisVersion:(id)sender {
 
-    AudioServicesPlaySystemSound(1521);
+	AudioServicesPlaySystemSound(1521);
 
-    self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.2" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/HotIcon.png"]];
+	self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.3" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/HotIcon.png"]];
 
-    [self.changelogController addBulletedListItemWithTitle:@"General" description:@"Full seamless Axon compatibility support with the 'Blur With Notifs' option, cc: RuntimeOverflow for helping finish it." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
+	[self.changelogController addBulletedListItemWithTitle:@"Tweak" description:@"Full Tako support for 'Blur Only With Notifs' option." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
 
-    _UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
-    _UIBackdropView *backdropView = [[_UIBackdropView alloc] initWithSettings:settings];
-    backdropView.layer.masksToBounds = YES;
-    backdropView.clipsToBounds = YES;
-    backdropView.frame = self.changelogController.viewIfLoaded.frame;
-    [self.changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
+	_UIBackdropView *backdropView = [[_UIBackdropView alloc] initWithSettings:settings];
+	backdropView.clipsToBounds = YES;
+	backdropView.layer.masksToBounds = YES;
+	backdropView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
 
-    backdropView.translatesAutoresizingMaskIntoConstraints = NO;
-    [backdropView.bottomAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.bottomAnchor constant:0].active = YES;
-    [backdropView.leftAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.leftAnchor constant:0].active = YES;
-    [backdropView.rightAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.rightAnchor constant:0].active = YES;
-    [backdropView.topAnchor constraintEqualToAnchor:self.changelogController.viewIfLoaded.topAnchor constant:0].active = YES;
+	[backdropView.bottomAnchor constraintEqualToAnchor : self.changelogController.viewIfLoaded.bottomAnchor].active = YES;
+	[backdropView.leadingAnchor constraintEqualToAnchor : self.changelogController.viewIfLoaded.leadingAnchor].active = YES;
+	[backdropView.trailingAnchor constraintEqualToAnchor : self.changelogController.viewIfLoaded.trailingAnchor].active = YES;
+	[backdropView.topAnchor constraintEqualToAnchor : self.changelogController.viewIfLoaded.topAnchor].active = YES;
 
-    self.changelogController.viewIfLoaded.backgroundColor = [UIColor clearColor];
-    self.changelogController.view.tintColor = [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00];
-    self.changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
-    self.changelogController.modalInPresentation = NO;
-    [self presentViewController:self.changelogController animated:YES completion:nil];
+	self.changelogController.modalInPresentation = NO;
+	self.changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
+	self.changelogController.view.tintColor = [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00];
+	self.changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
+	[self presentViewController:self.changelogController animated:YES completion:nil];
 
 }
 
 
 - (void)dismissVC {
 
-    [self.changelogController dismissViewControllerAnimated:YES completion:nil];
+	[self.changelogController dismissViewControllerAnimated:YES completion:nil];
 
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    tableView.tableHeaderView = self.headerView;
-    return [super tableView:tableView cellForRowAtIndexPath:indexPath];
+	tableView.tableHeaderView = self.headerView;
+	return [super tableView:tableView cellForRowAtIndexPath:indexPath];
 
 }
 
@@ -141,19 +123,19 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 - (id)readPreferenceValue:(PSSpecifier*)specifier {
 
-    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-    [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
-    return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
 
 }
 
 
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
 
-    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-    [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
-    [settings setObject:value forKey:specifier.properties[@"key"]];
-    [settings writeToFile:takeMeThere atomically:YES];
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	[settings setObject:value forKey:specifier.properties[@"key"]];
+	[settings writeToFile:takeMeThere atomically:YES];
 
 }
 
@@ -161,28 +143,26 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)shatterThePrefsToPieces {
 
 
-    AudioServicesPlaySystemSound(1521);
+	AudioServicesPlaySystemSound(1521);
 
-    UIAlertController* resetAlert = [UIAlertController alertControllerWithTitle:@"Amēlija"
-    message:@"Do you want to start fresh?"
-    preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *resetAlert = [UIAlertController alertControllerWithTitle:@"Amēlija" message:@"Do you want to start fresh?" preferredStyle:UIAlertControllerStyleAlert];
 
-    UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
 
-		NSFileManager *fileManager = [NSFileManager defaultManager];
+		NSFileManager *fileM = [NSFileManager defaultManager];
 
-		BOOL success = [fileManager removeItemAtPath:@"var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist" error:nil];
+		BOOL success = [fileM removeItemAtPath:@"var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist" error:nil];
 
 		if(success) [self blurEffect];
 
-    }];
+	}];
 
-    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Meh" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Meh" style:UIAlertActionStyleCancel handler:nil];
 
-    [resetAlert addAction:confirmAction];
-    [resetAlert addAction:cancelAction];
+	[resetAlert addAction:confirmAction];
+	[resetAlert addAction:cancelAction];
 
-    [self presentViewController:resetAlert animated:YES completion:nil];
+	[self presentViewController:resetAlert animated:YES completion:nil];
 
 
 }
@@ -193,15 +173,15 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
 	_UIBackdropView *backdropView = [[_UIBackdropView alloc] initWithSettings:settings];
-	backdropView.layer.masksToBounds = YES;
-	backdropView.clipsToBounds = YES;
 	backdropView.alpha = 0;
 	backdropView.frame = self.view.bounds;
+	backdropView.clipsToBounds = YES;
+	backdropView.layer.masksToBounds = YES;
 	[self.view addSubview:backdropView];
 
 	[UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
-		[backdropView setAlpha:1.0];
+		backdropView.alpha = 1;
 
 	} completion:^(BOOL finished) {
 
@@ -215,16 +195,15 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)respringMethod {
 
 
-    pid_t pid;
-    const char* args[] = {"sbreload", NULL, NULL, NULL};
-    posix_spawn(&pid, "/usr/bin/sbreload", NULL, NULL, (char* const*)args, NULL);
+	pid_t pid;
+	const char* args[] = {"sbreload", NULL, NULL, NULL};
+	posix_spawn(&pid, "/usr/bin/sbreload", NULL, NULL, (char* const*)args, NULL);
 
 
 }
 
+
 @end
-
-
 
 
 @implementation LSRootListController
@@ -232,63 +211,63 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 - (NSArray *)specifiers {
 
-    if (!_specifiers) {
+	if(!_specifiers) {
 
-        _specifiers = [self loadSpecifiersFromPlistName:@"LS" target:self];
+		_specifiers = [self loadSpecifiersFromPlistName:@"LS" target:self];
 
-        NSArray *chosenIDs = @[@"GroupCell-1", @"SliderCell-1", @"GroupCell-3", @"MiscLSBlursList", @"GroupCell-4", @"SliderCell-2"];
-        self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
-        for(PSSpecifier *specifier in _specifiers) {
-            if([chosenIDs containsObject:[specifier propertyForKey:@"id"]]) {
-                [self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-            }
-        }
-    }
+		NSArray *chosenIDs = @[@"GroupCell-1", @"SliderCell-1", @"GroupCell-3", @"MiscLSBlursList", @"GroupCell-4", @"SliderCell-2"];
+		self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
+		for(PSSpecifier *specifier in _specifiers) {
+			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]]) {
+				[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
+			}
+		}
+	}
 
-    return _specifiers;
+	return _specifiers;
 
 }
 
 
 - (void)reloadSpecifiers { // Dynamic specifiers
 
-    [super reloadSpecifiers];
+	[super reloadSpecifiers];
 
 
-    if (![[self readPreferenceValue:[self specifierForID:@"EpicLSBlurSwitch"]] boolValue]) {
+	if(![[self readPreferenceValue:[self specifierForID:@"EpicLSBlurSwitch"]] boolValue]) {
 
-        [self removeSpecifier:self.savedSpecifiers[@"GroupCell-1"] animated:NO];
-        [self removeSpecifier:self.savedSpecifiers[@"SliderCell-1"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-1"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"SliderCell-1"] animated:NO];
 
-    }
-
-
-    else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]]) {
-
-        [self insertSpecifier:self.savedSpecifiers[@"GroupCell-1"] afterSpecifierID:@"EpicLSBlurSwitch" animated:NO];
-        [self insertSpecifier:self.savedSpecifiers[@"SliderCell-1"] afterSpecifierID:@"GroupCell-1" animated:NO];
-
-    }
+	}
 
 
-    if (![[self readPreferenceValue:[self specifierForID:@"MiscLSBlursSwitch"]] boolValue]) {
+	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]]) {
 
-        [self removeSpecifier:self.savedSpecifiers[@"GroupCell-3"] animated:NO];
-        [self removeSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] animated:NO];
-        [self removeSpecifier:self.savedSpecifiers[@"GroupCell-4"] animated:NO];
-        [self removeSpecifier:self.savedSpecifiers[@"SliderCell-2"] animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-1"] afterSpecifierID:@"EpicLSBlurSwitch" animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"SliderCell-1"] afterSpecifierID:@"GroupCell-1" animated:NO];
 
-    }
+	}
 
 
-    else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell-3"]]) {
+	if(![[self readPreferenceValue:[self specifierForID:@"MiscLSBlursSwitch"]] boolValue]) {
 
-        [self insertSpecifier:self.savedSpecifiers[@"GroupCell-3"] afterSpecifierID:@"MiscLSBlursSwitch" animated:NO];
-        [self insertSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] afterSpecifierID:@"GroupCell-3" animated:NO];
-        [self insertSpecifier:self.savedSpecifiers[@"GroupCell-4"] afterSpecifierID:@"MiscLSBlursList" animated:NO];
-        [self insertSpecifier:self.savedSpecifiers[@"SliderCell-2"] afterSpecifierID:@"GroupCell-4" animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-3"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-4"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"SliderCell-2"] animated:NO];
 
-    }
+	}
+
+
+	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-3"]]) {
+
+		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-3"] afterSpecifierID:@"MiscLSBlursSwitch" animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] afterSpecifierID:@"GroupCell-3" animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-4"] afterSpecifierID:@"MiscLSBlursList" animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"SliderCell-2"] afterSpecifierID:@"GroupCell-4" animated:NO];
+
+	}
 
 }
 
@@ -296,8 +275,8 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)viewDidLoad {
 
 
-    [super viewDidLoad];
-    [self reloadSpecifiers];
+	[super viewDidLoad];
+	[self reloadSpecifiers];
 
 
 }
@@ -305,9 +284,9 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 - (id)readPreferenceValue:(PSSpecifier*)specifier {
 
-    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-    [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
-    return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
 
 }
 
@@ -315,65 +294,65 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
 
 
-    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-    [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
-    [settings setObject:value forKey:specifier.properties[@"key"]];
-    [settings writeToFile:takeMeThere atomically:YES];
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	[settings setObject:value forKey:specifier.properties[@"key"]];
+	[settings writeToFile:takeMeThere atomically:YES];
 
-    [NSDistributedNotificationCenter.defaultCenter postNotificationName:@"lsBlurApplied" object:nil];
-    [NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"lsBlurApplied" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
 
-    NSString *key = [specifier propertyForKey:@"key"];
-
-
-    if([key isEqualToString:@"epicLSBlur"]) {
+	NSString *key = [specifier propertyForKey:@"key"];
 
 
-        if (![value boolValue]) {
+	if([key isEqualToString:@"epicLSBlur"]) {
 
 
-            [self removeSpecifier:self.savedSpecifiers[@"GroupCell-1"] animated:YES];
-            [self removeSpecifier:self.savedSpecifiers[@"SliderCell-1"] animated:YES];
+		if(![value boolValue]) {
 
 
-        }
+			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-1"] animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"SliderCell-1"] animated:YES];
 
 
-        else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]]) {
-
-            [self insertSpecifier:self.savedSpecifiers[@"GroupCell-1"] afterSpecifierID:@"EpicLSBlurSwitch" animated:YES];
-            [self insertSpecifier:self.savedSpecifiers[@"SliderCell-1"] afterSpecifierID:@"GroupCell-1" animated:YES];
+		}
 
 
-        }
+		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]]) {
+
+			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-1"] afterSpecifierID:@"EpicLSBlurSwitch" animated:YES];
+			[self insertSpecifier:self.savedSpecifiers[@"SliderCell-1"] afterSpecifierID:@"GroupCell-1" animated:YES];
 
 
-    }
+		}
 
 
-    if([key isEqualToString:@"lsBlur"]) {
+	}
 
 
-        if (![value boolValue]) {
-
-            [self removeSpecifier:self.savedSpecifiers[@"GroupCell-3"] animated:YES];
-            [self removeSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] animated:YES];
-            [self removeSpecifier:self.savedSpecifiers[@"GroupCell-4"] animated:YES];
-            [self removeSpecifier:self.savedSpecifiers[@"SliderCell-2"] animated:YES];
-
-        }
+	if([key isEqualToString:@"lsBlur"]) {
 
 
-        else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell-3"]]) {
+		if(![value boolValue]) {
 
-            [self insertSpecifier:self.savedSpecifiers[@"GroupCell-3"] afterSpecifierID:@"MiscLSBlursSwitch" animated:YES];
-            [self insertSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] afterSpecifierID:@"GroupCell-3" animated:YES];
-            [self insertSpecifier:self.savedSpecifiers[@"GroupCell-4"] afterSpecifierID:@"MiscLSBlursList" animated:YES];
-            [self insertSpecifier:self.savedSpecifiers[@"SliderCell-2"] afterSpecifierID:@"GroupCell-4" animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-3"] animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-4"] animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"SliderCell-2"] animated:YES];
 
-        }
+		}
 
-    }
+
+		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-3"]]) {
+
+			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-3"] afterSpecifierID:@"MiscLSBlursSwitch" animated:YES];
+			[self insertSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] afterSpecifierID:@"GroupCell-3" animated:YES];
+			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-4"] afterSpecifierID:@"MiscLSBlursList" animated:YES];
+			[self insertSpecifier:self.savedSpecifiers[@"SliderCell-2"] afterSpecifierID:@"GroupCell-4" animated:YES];
+
+		}
+
+	}
 
 }
 
@@ -386,63 +365,63 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 - (NSArray *)specifiers {
 
-    if (!_specifiers) {
+	if(!_specifiers) {
 
-        _specifiers = [self loadSpecifiersFromPlistName:@"HS" target:self];
+		_specifiers = [self loadSpecifiersFromPlistName:@"HS" target:self];
 
-        NSArray *chosenIDs = @[@"GroupCell-5", @"SliderCell-3", @"GroupCell-6", @"GroupCell-7", @"MiscHSBlursList", @"MiscHSBlursList", @"GroupCell-8", @"SliderCell-4"];
-        self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
-        for(PSSpecifier *specifier in _specifiers) {
-            if([chosenIDs containsObject:[specifier propertyForKey:@"id"]]) {
-                [self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-            }
-        }
-    }
+		NSArray *chosenIDs = @[@"GroupCell-5", @"SliderCell-3", @"GroupCell-6", @"GroupCell-7", @"MiscHSBlursList", @"MiscHSBlursList", @"GroupCell-8", @"SliderCell-4"];
+		self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
+		for(PSSpecifier *specifier in _specifiers) {
+			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]]) {
+				[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
+			}
+		}
+	}
 
-    return _specifiers;
+	return _specifiers;
 
 }
 
 
 - (void)reloadSpecifiers { // Dynamic specifiers
 
-    [super reloadSpecifiers];
+	[super reloadSpecifiers];
 
 
-    if (![[self readPreferenceValue:[self specifierForID:@"EpicHSBlurSwitch"]] boolValue]) {
+	if(![[self readPreferenceValue:[self specifierForID:@"EpicHSBlurSwitch"]] boolValue]) {
 
-        [self removeSpecifier:self.savedSpecifiers[@"GroupCell-5"] animated:NO];
-        [self removeSpecifier:self.savedSpecifiers[@"SliderCell-3"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-5"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"SliderCell-3"] animated:NO];
 
-    }
-
-
-    else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell-5"]]) {
-
-        [self insertSpecifier:self.savedSpecifiers[@"GroupCell-5"] afterSpecifierID:@"EpicHSBlurSwitch" animated:NO];
-        [self insertSpecifier:self.savedSpecifiers[@"SliderCell-3"] afterSpecifierID:@"GroupCell-5" animated:NO];
-
-    }
+	}
 
 
-    if (![[self readPreferenceValue:[self specifierForID:@"MiscHSBlursSwitch"]] boolValue]) {
+	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-5"]]) {
 
-        [self removeSpecifier:self.savedSpecifiers[@"GroupCell-7"] animated:NO];
-        [self removeSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] animated:NO];
-        [self removeSpecifier:self.savedSpecifiers[@"GroupCell-8"] animated:NO];
-        [self removeSpecifier:self.savedSpecifiers[@"SliderCell-4"] animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-5"] afterSpecifierID:@"EpicHSBlurSwitch" animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"SliderCell-3"] afterSpecifierID:@"GroupCell-5" animated:NO];
 
-    }
+	}
 
 
-    else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell-7"]]) {
+	if(![[self readPreferenceValue:[self specifierForID:@"MiscHSBlursSwitch"]] boolValue]) {
 
-        [self insertSpecifier:self.savedSpecifiers[@"GroupCell-7"] afterSpecifierID:@"MiscHSBlursSwitch" animated:NO];
-        [self insertSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] afterSpecifierID:@"GroupCell-7" animated:NO];
-        [self insertSpecifier:self.savedSpecifiers[@"GroupCell-8"] afterSpecifierID:@"MiscHSBlursList" animated:NO];
-        [self insertSpecifier:self.savedSpecifiers[@"SliderCell-4"] afterSpecifierID:@"GroupCell-8" animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-7"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-8"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"SliderCell-4"] animated:NO];
 
-    }
+	}
+
+
+	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-7"]]) {
+
+		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-7"] afterSpecifierID:@"MiscHSBlursSwitch" animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] afterSpecifierID:@"GroupCell-7" animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-8"] afterSpecifierID:@"MiscHSBlursList" animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"SliderCell-4"] afterSpecifierID:@"GroupCell-8" animated:NO];
+
+	}
 
 }
 
@@ -450,8 +429,8 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)viewDidLoad {
 
 
-    [super viewDidLoad];
-    [self reloadSpecifiers];
+	[super viewDidLoad];
+	[self reloadSpecifiers];
 
 
 }
@@ -459,9 +438,9 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 - (id)readPreferenceValue:(PSSpecifier*)specifier {
 
-    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-    [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
-    return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
 
 }
 
@@ -469,63 +448,63 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
 
 
-    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-    [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
-    [settings setObject:value forKey:specifier.properties[@"key"]];
-    [settings writeToFile:takeMeThere atomically:YES];
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	[settings setObject:value forKey:specifier.properties[@"key"]];
+	[settings writeToFile:takeMeThere atomically:YES];
 
-    [NSDistributedNotificationCenter.defaultCenter postNotificationName:@"hsBlurApplied" object:nil];
-
-
-    NSString *key = [specifier propertyForKey:@"key"];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"hsBlurApplied" object:nil];
 
 
-    if([key isEqualToString:@"epicHSBlur"]) {
+	NSString *key = [specifier propertyForKey:@"key"];
 
 
-        if (![value boolValue]) {
+	if([key isEqualToString:@"epicHSBlur"]) {
 
 
-            [self removeSpecifier:self.savedSpecifiers[@"GroupCell-5"] animated:YES];
-            [self removeSpecifier:self.savedSpecifiers[@"SliderCell-3"] animated:YES];
-
-        }
+		if(![value boolValue]) {
 
 
-        else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell-5"]]) {
+			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-5"] animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"SliderCell-3"] animated:YES];
 
-            [self insertSpecifier:self.savedSpecifiers[@"GroupCell-5"] afterSpecifierID:@"EpicHSBlurSwitch" animated:YES];
-            [self insertSpecifier:self.savedSpecifiers[@"SliderCell-3"] afterSpecifierID:@"GroupCell-5" animated:YES];
-
-        }
+		}
 
 
-    }
+		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-5"]]) {
+
+			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-5"] afterSpecifierID:@"EpicHSBlurSwitch" animated:YES];
+			[self insertSpecifier:self.savedSpecifiers[@"SliderCell-3"] afterSpecifierID:@"GroupCell-5" animated:YES];
+
+		}
 
 
-    if([key isEqualToString:@"hsBlur"]) {
+	}
 
 
-        if (![value boolValue]) {
-
-            [self removeSpecifier:self.savedSpecifiers[@"GroupCell-7"] animated:YES];
-            [self removeSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] animated:YES];
-            [self removeSpecifier:self.savedSpecifiers[@"GroupCell-8"] animated:YES];
-            [self removeSpecifier:self.savedSpecifiers[@"SliderCell-4"] animated:YES];
-
-        }
+	if([key isEqualToString:@"hsBlur"]) {
 
 
-        else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell-7"]]) {
+		if(![value boolValue]) {
 
-            [self insertSpecifier:self.savedSpecifiers[@"GroupCell-7"] afterSpecifierID:@"MiscHSBlursSwitch" animated:YES];
-            [self insertSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] afterSpecifierID:@"GroupCell-7" animated:YES];
-            [self insertSpecifier:self.savedSpecifiers[@"GroupCell-8"] afterSpecifierID:@"MiscHSBlursList" animated:YES];
-            [self insertSpecifier:self.savedSpecifiers[@"SliderCell-4"] afterSpecifierID:@"GroupCell-8" animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-7"] animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-8"] animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"SliderCell-4"] animated:YES];
 
-        }
+		}
 
-    }
+
+		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-7"]]) {
+
+			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-7"] afterSpecifierID:@"MiscHSBlursSwitch" animated:YES];
+			[self insertSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] afterSpecifierID:@"GroupCell-7" animated:YES];
+			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-8"] afterSpecifierID:@"MiscHSBlursList" animated:YES];
+			[self insertSpecifier:self.savedSpecifiers[@"SliderCell-4"] afterSpecifierID:@"GroupCell-8" animated:YES];
+
+		}
+
+	}
 
 }
 
@@ -533,24 +512,22 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 @end
 
 
-
-
 @implementation AmelijaLinksRootListController
 
 
 - (NSArray *)specifiers {
-    if (!_specifiers) {
-        _specifiers = [self loadSpecifiersFromPlistName:@"AmelijaLinks" target:self];
-    }
 
-    return _specifiers;
+	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"AmelijaLinks" target:self];
+
+	return _specifiers;
+
 }
 
 
 - (void)discord {
 
 
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://discord.gg/jbE3avwSHs"] options:@{} completionHandler:nil];
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://discord.gg/jbE3avwSHs"] options:@{} completionHandler:nil];
 
 
 }
@@ -559,7 +536,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)paypal {
 
 
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://paypal.me/Luki120"] options:@{} completionHandler:nil];
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://paypal.me/Luki120"] options:@{} completionHandler:nil];
 
 
 }
@@ -568,7 +545,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)github {
 
 
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://github.com/Luki120/April"] options:@{} completionHandler:nil];
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://github.com/Luki120/April"] options:@{} completionHandler:nil];
 
 
 }
@@ -577,7 +554,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)april {
 
 
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.april"] options:@{} completionHandler:nil];
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.april"] options:@{} completionHandler:nil];
 
 
 }
@@ -586,7 +563,7 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 - (void)arizona {
 
 
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.arizona"] options:@{} completionHandler:nil];
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.arizona"] options:@{} completionHandler:nil];
 
 
 }
@@ -601,17 +578,15 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 
 - (NSArray *)specifiers {
-	if (!_specifiers) {
-		_specifiers = [self loadSpecifiersFromPlistName:@"AmelijaContributors" target:self];
-	}
+
+	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"AmelijaContributors" target:self];
 
 	return _specifiers;
+
 }
 
 
 @end
-
-
 
 
 @implementation AmelijaTableCell
@@ -619,24 +594,25 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 
 - (void)tintColorDidChange {
 
-    [super tintColorDidChange];
+	[super tintColorDidChange];
 
-    self.textLabel.textColor = tint;
-    self.textLabel.highlightedTextColor = tint;
+	self.textLabel.textColor = tint;
+	self.textLabel.highlightedTextColor = tint;
 
 }
 
 
 - (void)refreshCellContentsWithSpecifier:(PSSpecifier *)specifier {
 
-    [super refreshCellContentsWithSpecifier:specifier];
+	[super refreshCellContentsWithSpecifier:specifier];
 
-    if ([self respondsToSelector:@selector(tintColor)]) {
+	if([self respondsToSelector:@selector(tintColor)]) {
 
-        self.textLabel.textColor = tint;
-        self.textLabel.highlightedTextColor = tint;
+		self.textLabel.textColor = tint;
+		self.textLabel.highlightedTextColor = tint;
 
-    }
+	}
+
 }
 
 
