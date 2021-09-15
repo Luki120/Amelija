@@ -5,6 +5,13 @@
 #import <spawn.h>
 
 
+static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
+
+#define tint [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00]
+
+UIBarButtonItem *changelogButtonItem;
+
+
 @interface OBButtonTray : UIView
 @property (nonatomic,retain) UIVisualEffectView * effectView;
 - (void)addButton:(id)arg1;
@@ -41,9 +48,6 @@
 @end
 
 
-UIBarButtonItem *changelogButtonItem;
-
-
 @interface AmelijaTableCell : PSTableCell
 @end
 
@@ -61,10 +65,10 @@ UIBarButtonItem *changelogButtonItem;
 	UITableView * _table;
 
 }
-@property (nonatomic, retain) UIView *headerView;
-@property (nonatomic, retain) UIImageView *iconView;
-@property (nonatomic, retain) UIImageView *headerImageView;
-@property (nonatomic, retain) OBWelcomeController *changelogController;
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UIImageView *iconView;
+@property (nonatomic, strong) UIImageView *headerImageView;
+@property (nonatomic, strong) OBWelcomeController *changelogController;
 - (void)showWtfChangedInThisVersion:(UIButton *)sender;
 - (void)shatterThePrefsToPieces;
 - (void)respringMethod;
@@ -77,12 +81,12 @@ UIBarButtonItem *changelogButtonItem;
 
 
 @interface LSRootListController : PSListController
-@property (nonatomic, retain) NSMutableDictionary *savedSpecifiers;
+@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
 @end
 
 
 @interface HSRootListController : PSListController
-@property (nonatomic, retain) NSMutableDictionary *savedSpecifiers;
+@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
 @end
 
 
