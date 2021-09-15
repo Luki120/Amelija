@@ -1,6 +1,4 @@
-#import <UIKit/UIKit.h>
-
-
+@import UIKit;
 
 
 // LS
@@ -19,6 +17,7 @@ static UIBlurEffect* lsBlurEffect;
 
 static int notificationCount = 0;
 static NSInteger axonCellCount = 0;
+static NSInteger takoCellCount = 0;
 
 
 // HS
@@ -78,6 +77,10 @@ static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlij
 @end
 
 
+@interface TKOView : UIView
+@end
+
+
 static void loadPrefs() {
 
 
@@ -103,25 +106,24 @@ static void loadPrefs() {
 }
 
 
-
-
 /*
 
 
 Axon support smh, only because I love your creation Nepeta,
 thank you so much for this gem. Hope you come back some day.
-lmao I'm writing this like if she's ever gonna come here,
+Lmao I'm writing this like if she's ever gonna come here,
 anyways here's the magic, and we gotta do it kinda the old school way
 because otherwise due to Amēlija being alphabetically before Axon
 in the loading process, normal hooks loaded in the constructor wouldn't
 take any effect, so that's why we pass a message with MSHookMessageEx
-so we can control when to load it
+so we can control when to load it. And no, fuck dlopen, this is better
 
 
 */
 
 
 static NSInteger (*origNumberOfCells)(id self, SEL _cmd, id collectionView, NSInteger section);
+
 
 NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section) {
 
@@ -136,6 +138,22 @@ NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section)
 }
 
 
+static NSInteger (*takoOrigNumberOfCells)(id self, SEL _cmd, id collectionView, NSInteger section);
+
+
+NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger section) {
+
+
+	takoCellCount = takoOrigNumberOfCells(self, _cmd, collectionView, section);
+
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+
+	return takoCellCount;
+
+
+}
+
+
 %hook SpringBoard
 
 
@@ -143,7 +161,9 @@ NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section)
 
 
 	%orig;
+
 	MSHookMessageEx(%c(AXNView), @selector(collectionView:numberOfItemsInSection:), (IMP) &numberOfCells, (IMP *) &origNumberOfCells);
+	MSHookMessageEx(%c(TKOView), @selector(collectionView:numberOfItemsInSection:), (IMP) &takoNumberOfCells, (IMP *) &takoOrigNumberOfCells);
 
 
 }
@@ -298,20 +318,21 @@ NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section)
 
 }
 
-%new
 
+%new
 
 - (void)showBlurIfNotifsPresent { // self explanatory
 
 
 	loadPrefs();
 
+	NSFileManager *fileM = [NSFileManager defaultManager];
+
 	if(!blurIfNotifs) self.blurView.alpha = epicLSBlur ? epicLSBlurIntensity : lsIntensity;
 
-	else {
+	else if(![fileM fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/Tako.dylib"]) {
 
  		if((notificationCount == 0) && (axonCellCount == 0)) {
-
 
 			[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
@@ -319,9 +340,29 @@ NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section)
 
 			} completion:nil];
 
-
 		} else {
 
+			[UIView transitionWithView:self.blurView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+
+				self.blurView.alpha = epicLSBlur ? epicLSBlurIntensity : lsIntensity;
+
+			} completion:nil];
+
+		}
+
+	} 
+
+	else {
+
+		if(takoCellCount == 0) {
+
+			[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+
+				self.blurView.alpha = 0;
+
+			} completion:nil];
+
+		} else {
 
 			[UIView transitionWithView:self.blurView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
@@ -343,9 +384,9 @@ NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section)
 
 	[self unleashThatLSBlur];
 
-	[[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
-	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(unleashThatLSBlur) name:@"lsBlurApplied" object:nil];
-	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(showBlurIfNotifsPresent) name:@"notifArrivedSoApplyingBlurNow" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter removeObserver:self];
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(unleashThatLSBlur) name:@"lsBlurApplied" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(showBlurIfNotifsPresent) name:@"notifArrivedSoApplyingBlurNow" object:nil];
 
 
 }
@@ -460,8 +501,8 @@ NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section)
 
 	[self unleashThatHSBlur];
 
-	[[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
-	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(unleashThatHSBlur) name:@"hsBlurApplied" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter removeObserver:self];
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(unleashThatHSBlur) name:@"hsBlurApplied" object:nil];
 
 
 }
