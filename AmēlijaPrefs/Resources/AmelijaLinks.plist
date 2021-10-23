@@ -72,7 +72,7 @@
 			<key>label</key>
 			<string>April</string>
 			<key>icon</key>
-			<string>April@2x.png</string>
+			<string>Assets/April@2x.png</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -84,11 +84,11 @@
 			<key>defaults</key>
 			<string>me.luki.amēlijaprefs</string>
 			<key>action</key>
-			<string>arizona</string>
+			<string>meredith</string>
 			<key>label</key>
-			<string>Arizona</string>
+			<string>Meredith</string>
 			<key>icon</key>
-			<string>Arizona@2x.png</string>
+			<string>Assets/Meredith@2x.png</string>
 		</dict>
 	</array>
 	<key>title</key>
