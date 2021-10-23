@@ -49,16 +49,14 @@
 				<string>PSGroupCell</string>
 			</dict>
 			<dict>
+				<key>action</key>
+				<string>shatterThePrefsToPieces</string>
 				<key>cell</key>
-				<string>PSLinkCell</string>
+				<string>PSButtonCell</string>
 				<key>cellClass</key>
 				<string>AmelijaTableCell</string>
-				<key>detail</key>
-				<string>AmelijaLinksRootListController</string>
-				<key>isController</key>
-				<true/>
 				<key>label</key>
-				<string>Take A Look</string>
+				<string>Reset Preferences</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -81,14 +79,16 @@
 				<string>PSGroupCell</string>
 			</dict>
 			<dict>
-				<key>action</key>
-				<string>shatterThePrefsToPieces</string>
 				<key>cell</key>
-				<string>PSButtonCell</string>
+				<string>PSLinkCell</string>
 				<key>cellClass</key>
 				<string>AmelijaTableCell</string>
+				<key>detail</key>
+				<string>AmelijaLinksRootListController</string>
+				<key>isController</key>
+				<true/>
 				<key>label</key>
-				<string>Reset Preferences</string>
+				<string>Take A Look</string>
 			</dict>
 			<dict>
 				<key>cell</key>
