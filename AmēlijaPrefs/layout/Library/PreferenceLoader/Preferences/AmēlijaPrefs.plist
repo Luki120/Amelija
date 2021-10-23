@@ -11,7 +11,7 @@
 		<key>detail</key>
 		<string>AMLRootListController</string>
 		<key>icon</key>
-		<string>icon.png</string>
+		<string>Assets/Amēlija.png</string>
 		<key>isController</key>
 		<true/>
 		<key>label</key>
