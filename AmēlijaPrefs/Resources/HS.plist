@@ -18,59 +18,9 @@
 				<key>defaults</key>
 				<string>me.luki.amēlijaprefs</string>
 				<key>key</key>
-				<string>epicHSBlur</string>
-				<key>label</key>
-				<string>Epic Blur</string>
-				<key>PostNotification</key>
-				<string>me.luki.amēlijaprefs.loadPrefs</string>
-				<key>id</key>
-				<string>EpicHSBlurSwitch</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-				<key>label</key>
-				<string>This slider controls the intensity (alpha) of the blur</string>
-				<key>id</key>
-				<string>GroupCell-5</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSSliderCell</string>
-				<key>default</key>
-				<real>1</real>
-				<key>defaults</key>
-				<string>me.luki.amēlijaprefs</string>
-				<key>key</key>
-				<string>epicHSBlurIntensity</string>
-				<key>min</key>
-				<real>0</real>
-				<key>max</key>
-				<real>1</real>
-				<key>showValue</key>
-				<true/>
-				<key>id</key>
-				<string>SliderCell-3</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-				<key>id</key>
-				<string>GroupCell-6</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>default</key>
-				<false/>
-				<key>defaults</key>
-				<string>me.luki.amēlijaprefs</string>
-				<key>key</key>
 				<string>hsBlur</string>
 				<key>label</key>
-				<string>Misc Blurs</string>
-				<key>PostNotification</key>
-				<string>me.luki.amēlijaprefs.loadPrefs</string>
+				<string>Blur</string>
 				<key>id</key>
 				<string>MiscHSBlursSwitch</string>
 			</dict>
@@ -92,9 +42,9 @@
 				<key>default</key>
 				<integer>0</integer>
 				<key>key</key>
-				<string>blurType</string>
+				<string>hsBlurType</string>
 				<key>label</key>
-				<string>Misc Blurs</string>
+				<string>Blur Types</string>
 				<key>validValues</key>
 				<array>
 					<integer>0</integer>
@@ -104,9 +54,11 @@
 					<integer>4</integer>
 					<integer>5</integer>
 					<integer>6</integer>
+					<integer>7</integer>
 				</array>
 				<key>validTitles</key>
 				<array>
+					<string>Epic</string>
 					<string>Dark</string>
 					<string>Light</string>
 					<string>Adaptive</string>

@@ -13,21 +13,21 @@ UIBarButtonItem *changelogButtonItem;
 
 
 @interface OBButtonTray : UIView
-@property (nonatomic,retain) UIVisualEffectView * effectView;
+@property (nonatomic, strong) UIVisualEffectView *effectView;
 - (void)addButton:(id)arg1;
-- (void)addCaptionText:(id)arg1;;
+- (void)addCaptionText:(id)arg1;
 @end
 
 
 @interface OBBoldTrayButton : UIButton
-- (void)setTitle:(id)arg1 forState:(unsigned long long)arg2;
 + (id)buttonWithType:(long long)arg1;
+- (void)setTitle:(id)arg1 forState:(unsigned long long)arg2;
 @end
 
 
 @interface OBWelcomeController : UIViewController
-@property (nonatomic, retain) UIView * viewIfLoaded;
-@property (nonatomic, strong) UIColor * backgroundColor;
+@property (nonatomic, strong) UIView *viewIfLoaded;
+@property (nonatomic, strong) UIColor *backgroundColor;
 @property (assign, nonatomic) BOOL _shouldInlineButtontray;
 - (OBButtonTray *)buttonTray;
 - (id)initWithTitle:(id)arg1 detailText:(id)arg2 icon:(id)arg3;
@@ -40,11 +40,11 @@ UIBarButtonItem *changelogButtonItem;
 @end
 
 @interface _UIBackdropView : UIView
-- (id)initWithFrame:(CGRect)arg1 autosizesToFitSuperview:(BOOL)arg2 settings:(id)arg3;
-- (id)initWithSettings:(id)arg1;
 @property (assign, nonatomic) BOOL blurRadiusSetOnce;
 @property (assign, nonatomic) double _blurRadius;
-@property (nonatomic, copy) NSString * _blurQuality;
+@property (copy, nonatomic) NSString *_blurQuality;
+- (id)initWithSettings:(id)arg1;
+- (id)initWithFrame:(CGRect)arg1 autosizesToFitSuperview:(BOOL)arg2 settings:(id)arg3;
 @end
 
 

@@ -13,54 +13,59 @@
 }
 
 
-- (void)viewDidLoad {
+- (id)init {
 
+	self = [super init];
 
-	[super viewDidLoad];
+	if(self) {
 
+		UIImage *icon = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/Amēlija@2x.png"];
+		UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMBanner.png"];
 
-	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/hotbanner.png"];
+		self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,UIScreen.mainScreen.bounds.size.width,UIScreen.mainScreen.bounds.size.width * banner.size.height / banner.size.width)];
+		self.headerImageView = [UIImageView new];
+		self.headerImageView.image = banner;
+		self.headerImageView.contentMode = UIViewContentModeScaleAspectFill;
+		self.headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
+		[self.headerView addSubview:self.headerImageView];
 
-	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,UIScreen.mainScreen.bounds.size.width,UIScreen.mainScreen.bounds.size.width * banner.size.height / banner.size.width)];
-	self.headerImageView = [UIImageView new];
-	self.headerImageView.image = banner;
-	self.headerImageView.contentMode = UIViewContentModeScaleAspectFill;
-	self.headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.headerView addSubview:self.headerImageView];
+		UIButton *changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
+		changelogButton.frame = CGRectMake(0,0,30,30);
+		changelogButton.tintColor = [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00];
+		changelogButton.layer.cornerRadius = changelogButton.frame.size.height / 2;
+		changelogButton.layer.masksToBounds = YES;
+		[changelogButton setImage:[UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
+		[changelogButton addTarget:self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
 
-	UIButton *changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
-	changelogButton.frame = CGRectMake(0,0,30,30);
-	changelogButton.tintColor = [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00];
-	changelogButton.layer.cornerRadius = changelogButton.frame.size.height / 2;
-	changelogButton.layer.masksToBounds = YES;
-	[changelogButton setImage:[UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
-	[changelogButton addTarget:self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
+		changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
+		self.navigationItem.rightBarButtonItem = changelogButtonItem;
 
-	changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
-	self.navigationItem.rightBarButtonItem = changelogButtonItem;
+		self.navigationItem.titleView = [UIView new];
+		self.iconView = [UIImageView new];
+		self.iconView.alpha = 1;
+		self.iconView.image = icon;
+		self.iconView.contentMode = UIViewContentModeScaleAspectFit;
+		self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
+		[self.navigationItem.titleView addSubview:self.iconView];
 
-	self.navigationItem.titleView = [UIView new];
-	self.iconView = [UIImageView new];
-	self.iconView.alpha = 1;
-	self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/icon@2x.png"];
-	self.iconView.contentMode = UIViewContentModeScaleAspectFit;
-	self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.navigationItem.titleView addSubview:self.iconView];
+		[NSLayoutConstraint activateConstraints:@[
 
-	[NSLayoutConstraint activateConstraints:@[
+			[self.headerImageView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
+			[self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
+			[self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],
+			[self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
+			[self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
+			[self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
+			[self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
+			[self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
 
-		[self.headerImageView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
-		[self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
-		[self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],
-		[self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
-		[self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
-		[self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
-		[self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
-		[self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
+		]];
 
-	]];
+		_table.tableHeaderView = self.headerView;
 
-	_table.tableHeaderView = self.headerView;
+	}
+
+	return self;
 
 }
 
@@ -69,9 +74,9 @@
 
 	AudioServicesPlaySystemSound(1521);
 
-	self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.3" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/HotIcon.png"]];
+	self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.4" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMHotIcon.png"]];
 
-	[self.changelogController addBulletedListItemWithTitle:@"Tweak" description:@"Full Tako support for 'Blur Only With Notifs' option." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
+	[self.changelogController addBulletedListItemWithTitle:@"Code" description:@"Refactoring." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
@@ -142,7 +147,6 @@
 
 - (void)shatterThePrefsToPieces {
 
-
 	AudioServicesPlaySystemSound(1521);
 
 	UIAlertController *resetAlert = [UIAlertController alertControllerWithTitle:@"Amēlija" message:@"Do you want to start fresh?" preferredStyle:UIAlertControllerStyleAlert];
@@ -163,7 +167,6 @@
 	[resetAlert addAction:cancelAction];
 
 	[self presentViewController:resetAlert animated:YES completion:nil];
-
 
 }
 
@@ -194,11 +197,9 @@
 
 - (void)respringMethod {
 
-
 	pid_t pid;
 	const char* args[] = {"sbreload", NULL, NULL, NULL};
 	posix_spawn(&pid, "/usr/bin/sbreload", NULL, NULL, (char* const*)args, NULL);
-
 
 }
 
@@ -215,13 +216,16 @@
 
 		_specifiers = [self loadSpecifiersFromPlistName:@"LS" target:self];
 
-		NSArray *chosenIDs = @[@"GroupCell-1", @"SliderCell-1", @"GroupCell-3", @"MiscLSBlursList", @"GroupCell-4", @"SliderCell-2"];
-		self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
-		for(PSSpecifier *specifier in _specifiers) {
-			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]]) {
+		NSArray *chosenIDs = @[@"GroupCell-3", @"MiscLSBlursList", @"GroupCell-4", @"SliderCell-2", @"GroupCell-5", @"BlurOnlyWithNotifsSwitch"];
+
+		self.savedSpecifiers = (self.savedSpecifiers) ?: [NSMutableDictionary new];
+
+		for(PSSpecifier *specifier in _specifiers)
+
+			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
+
 				[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-			}
-		}
+
 	}
 
 	return _specifiers;
@@ -233,32 +237,16 @@
 
 	[super reloadSpecifiers];
 
-
-	if(![[self readPreferenceValue:[self specifierForID:@"EpicLSBlurSwitch"]] boolValue]) {
-
-		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-1"] animated:NO];
-		[self removeSpecifier:self.savedSpecifiers[@"SliderCell-1"] animated:NO];
-
-	}
-
-
-	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]]) {
-
-		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-1"] afterSpecifierID:@"EpicLSBlurSwitch" animated:NO];
-		[self insertSpecifier:self.savedSpecifiers[@"SliderCell-1"] afterSpecifierID:@"GroupCell-1" animated:NO];
-
-	}
-
-
 	if(![[self readPreferenceValue:[self specifierForID:@"MiscLSBlursSwitch"]] boolValue]) {
 
 		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-3"] animated:NO];
 		[self removeSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] animated:NO];
 		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-4"] animated:NO];
 		[self removeSpecifier:self.savedSpecifiers[@"SliderCell-2"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-5"] animated:NO];
+		[self removeSpecifier:self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"] animated:NO];
 
 	}
-
 
 	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-3"]]) {
 
@@ -266,6 +254,8 @@
 		[self insertSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] afterSpecifierID:@"GroupCell-3" animated:NO];
 		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-4"] afterSpecifierID:@"MiscLSBlursList" animated:NO];
 		[self insertSpecifier:self.savedSpecifiers[@"SliderCell-2"] afterSpecifierID:@"GroupCell-4" animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-5"] afterSpecifierID:@"SliderCell-2" animated:NO];
+		[self insertSpecifier:self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"] afterSpecifierID:@"GroupCell-5" animated:NO];
 
 	}
 
@@ -274,10 +264,8 @@
 
 - (void)viewDidLoad {
 
-
 	[super viewDidLoad];
 	[self reloadSpecifiers];
-
 
 }
 
@@ -293,7 +281,6 @@
 
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
 
-
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];
@@ -304,34 +291,7 @@
 
 	NSString *key = [specifier propertyForKey:@"key"];
 
-
-	if([key isEqualToString:@"epicLSBlur"]) {
-
-
-		if(![value boolValue]) {
-
-
-			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-1"] animated:YES];
-			[self removeSpecifier:self.savedSpecifiers[@"SliderCell-1"] animated:YES];
-
-
-		}
-
-
-		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]]) {
-
-			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-1"] afterSpecifierID:@"EpicLSBlurSwitch" animated:YES];
-			[self insertSpecifier:self.savedSpecifiers[@"SliderCell-1"] afterSpecifierID:@"GroupCell-1" animated:YES];
-
-
-		}
-
-
-	}
-
-
 	if([key isEqualToString:@"lsBlur"]) {
-
 
 		if(![value boolValue]) {
 
@@ -339,9 +299,10 @@
 			[self removeSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] animated:YES];
 			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-4"] animated:YES];
 			[self removeSpecifier:self.savedSpecifiers[@"SliderCell-2"] animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-5"] animated:YES];
+			[self removeSpecifier:self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"] animated:YES];
 
 		}
-
 
 		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-3"]]) {
 
@@ -349,6 +310,8 @@
 			[self insertSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] afterSpecifierID:@"GroupCell-3" animated:YES];
 			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-4"] afterSpecifierID:@"MiscLSBlursList" animated:YES];
 			[self insertSpecifier:self.savedSpecifiers[@"SliderCell-2"] afterSpecifierID:@"GroupCell-4" animated:YES];
+			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-5"] afterSpecifierID:@"SliderCell-2" animated:YES];
+			[self insertSpecifier:self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"] afterSpecifierID:@"GroupCell-5" animated:YES];
 
 		}
 
@@ -369,13 +332,16 @@
 
 		_specifiers = [self loadSpecifiersFromPlistName:@"HS" target:self];
 
-		NSArray *chosenIDs = @[@"GroupCell-5", @"SliderCell-3", @"GroupCell-6", @"GroupCell-7", @"MiscHSBlursList", @"MiscHSBlursList", @"GroupCell-8", @"SliderCell-4"];
+		NSArray *chosenIDs = @[@"GroupCell-7", @"MiscHSBlursList", @"GroupCell-8", @"SliderCell-4"];
+
 		self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
-		for(PSSpecifier *specifier in _specifiers) {
-			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]]) {
+
+		for(PSSpecifier *specifier in _specifiers)
+
+			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
+
 				[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-			}
-		}
+
 	}
 
 	return _specifiers;
@@ -387,23 +353,6 @@
 
 	[super reloadSpecifiers];
 
-
-	if(![[self readPreferenceValue:[self specifierForID:@"EpicHSBlurSwitch"]] boolValue]) {
-
-		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-5"] animated:NO];
-		[self removeSpecifier:self.savedSpecifiers[@"SliderCell-3"] animated:NO];
-
-	}
-
-
-	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-5"]]) {
-
-		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-5"] afterSpecifierID:@"EpicHSBlurSwitch" animated:NO];
-		[self insertSpecifier:self.savedSpecifiers[@"SliderCell-3"] afterSpecifierID:@"GroupCell-5" animated:NO];
-
-	}
-
-
 	if(![[self readPreferenceValue:[self specifierForID:@"MiscHSBlursSwitch"]] boolValue]) {
 
 		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-7"] animated:NO];
@@ -412,7 +361,6 @@
 		[self removeSpecifier:self.savedSpecifiers[@"SliderCell-4"] animated:NO];
 
 	}
-
 
 	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-7"]]) {
 
@@ -428,10 +376,8 @@
 
 - (void)viewDidLoad {
 
-
 	[super viewDidLoad];
 	[self reloadSpecifiers];
-
 
 }
 
@@ -447,7 +393,6 @@
 
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
 
-
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];
@@ -455,35 +400,9 @@
 
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"hsBlurApplied" object:nil];
 
-
 	NSString *key = [specifier propertyForKey:@"key"];
 
-
-	if([key isEqualToString:@"epicHSBlur"]) {
-
-
-		if(![value boolValue]) {
-
-
-			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-5"] animated:YES];
-			[self removeSpecifier:self.savedSpecifiers[@"SliderCell-3"] animated:YES];
-
-		}
-
-
-		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-5"]]) {
-
-			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-5"] afterSpecifierID:@"EpicHSBlurSwitch" animated:YES];
-			[self insertSpecifier:self.savedSpecifiers[@"SliderCell-3"] afterSpecifierID:@"GroupCell-5" animated:YES];
-
-		}
-
-
-	}
-
-
 	if([key isEqualToString:@"hsBlur"]) {
-
 
 		if(![value boolValue]) {
 
@@ -493,7 +412,6 @@
 			[self removeSpecifier:self.savedSpecifiers[@"SliderCell-4"] animated:YES];
 
 		}
-
 
 		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-7"]]) {
 
@@ -526,52 +444,40 @@
 
 - (void)discord {
 
-
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://discord.gg/jbE3avwSHs"] options:@{} completionHandler:nil];
-
+	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://discord.gg/jbE3avwSHs"] options:@{} completionHandler:nil];
 
 }
 
 
 - (void)paypal {
 
-
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://paypal.me/Luki120"] options:@{} completionHandler:nil];
-
+	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://paypal.me/Luki120"] options:@{} completionHandler:nil];
 
 }
 
 
 - (void)github {
 
-
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://github.com/Luki120/April"] options:@{} completionHandler:nil];
-
+	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://github.com/Luki120/Amelija"] options:@{} completionHandler:nil];
 
 }
 
 
 - (void)april {
 
-
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.april"] options:@{} completionHandler:nil];
-
+	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.april"] options:@{} completionHandler:nil];
 
 }
 
 
-- (void)arizona {
+- (void)meredith {
 
-
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.arizona"] options:@{} completionHandler:nil];
-
+	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.meredith"] options:@{} completionHandler:nil];
 
 }
 
 
 @end
-
-
 
 
 @implementation AmelijaContributorsRootListController

@@ -18,55 +18,9 @@
 				<key>defaults</key>
 				<string>me.luki.amēlijaprefs</string>
 				<key>key</key>
-				<string>epicLSBlur</string>
-				<key>label</key>
-				<string>Epic Blur</string>
-				<key>id</key>
-				<string>EpicLSBlurSwitch</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-				<key>label</key>
-				<string>This slider controls the intensity (alpha) of the blur</string>
-				<key>id</key>
-				<string>GroupCell-1</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSSliderCell</string>
-				<key>default</key>
-				<real>1</real>
-				<key>defaults</key>
-				<string>me.luki.amēlijaprefs</string>
-				<key>key</key>
-				<string>epicLSBlurIntensity</string>
-				<key>min</key>
-				<real>0</real>
-				<key>max</key>
-				<real>1</real>
-				<key>showValue</key>
-				<true/>
-				<key>id</key>
-				<string>SliderCell-1</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-				<key>id</key>
-				<string>GroupCell-2</string>
-			</dict>
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>default</key>
-				<false/>
-				<key>defaults</key>
-				<string>me.luki.amēlijaprefs</string>
-				<key>key</key>
 				<string>lsBlur</string>
 				<key>label</key>
-				<string>Misc Blurs</string>
+				<string>Blur</string>
 				<key>id</key>
 				<string>MiscLSBlursSwitch</string>
 			</dict>
@@ -90,7 +44,7 @@
 				<key>key</key>
 				<string>lsBlurType</string>
 				<key>label</key>
-				<string>Misc Blurs</string>
+				<string>Blur Types</string>
 				<key>validValues</key>
 				<array>
 					<integer>0</integer>
@@ -100,9 +54,11 @@
 					<integer>4</integer>
 					<integer>5</integer>
 					<integer>6</integer>
+					<integer>7</integer>
 				</array>
 				<key>validTitles</key>
 				<array>
+					<string>Epic</string>
 					<string>Dark</string>
 					<string>Light</string>
 					<string>Adaptive</string>
@@ -141,6 +97,8 @@
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell-5</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -153,6 +111,8 @@
 				<string>blurIfNotifs</string>
 				<key>label</key>
 				<string>Blur Only With Notifs</string>
+				<key>id</key>
+				<string>BlurOnlyWithNotifsSwitch</string>
 			</dict>
 		</array>
 		<key>title</key>
