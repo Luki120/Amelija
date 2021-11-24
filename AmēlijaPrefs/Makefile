@@ -2,6 +2,7 @@ BUNDLE_NAME = AmēlijaPrefs
 
 AmēlijaPrefs_FILES = AMLRootListController.m
 AmēlijaPrefs_CFLAGS = -fobjc-arc
+AmēlijaPrefs_LIBRARIES = gcuniversal
 AmēlijaPrefs_FRAMEWORKS = UIKit
 AmēlijaPrefs_PRIVATE_FRAMEWORKS = Preferences OnBoardingKit
 AmēlijaPrefs_INSTALL_PATH = /Library/PreferenceBundles

@@ -5,6 +5,7 @@ TWEAK_NAME = Amēlija
 
 Amēlija_FILES = Amēlija.x
 Amēlija_CFLAGS = -fobjc-arc
+Amēlija_LIBRARIES = gcuniversal
 
 SUBPROJECTS += AmēlijaPrefs
 
