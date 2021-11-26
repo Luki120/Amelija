@@ -1,7 +1,15 @@
 #include "AMLRootListController.h"
 
 
-@implementation AMLRootListController
+@implementation AMLRootListController {
+
+	UITableView *_table;
+	UIImageView *iconView;
+	UIView *headerView;
+	UIImageView *headerImageView;
+	OBWelcomeController *changelogController;
+
+}
 
 
 - (NSArray *)specifiers {
@@ -17,55 +25,67 @@
 
 	self = [super init];
 
-	if(self) {
+	if(self)
 
-		UIImage *icon = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/Amēlija@2x.png"];
-		UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMBanner.png"];
-
-		self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,UIScreen.mainScreen.bounds.size.width,UIScreen.mainScreen.bounds.size.width * banner.size.height / banner.size.width)];
-		self.headerImageView = [UIImageView new];
-		self.headerImageView.image = banner;
-		self.headerImageView.contentMode = UIViewContentModeScaleAspectFill;
-		self.headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-		[self.headerView addSubview:self.headerImageView];
-
-		UIButton *changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
-		changelogButton.frame = CGRectMake(0,0,30,30);
-		changelogButton.tintColor = [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00];
-		changelogButton.layer.cornerRadius = changelogButton.frame.size.height / 2;
-		changelogButton.layer.masksToBounds = YES;
-		[changelogButton setImage:[UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
-		[changelogButton addTarget:self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
-
-		changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
-		self.navigationItem.rightBarButtonItem = changelogButtonItem;
-
-		self.navigationItem.titleView = [UIView new];
-		self.iconView = [UIImageView new];
-		self.iconView.alpha = 1;
-		self.iconView.image = icon;
-		self.iconView.contentMode = UIViewContentModeScaleAspectFit;
-		self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
-		[self.navigationItem.titleView addSubview:self.iconView];
-
-		[NSLayoutConstraint activateConstraints:@[
-
-			[self.headerImageView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
-			[self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
-			[self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],
-			[self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
-			[self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
-			[self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
-			[self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
-			[self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
-
-		]];
-
-		_table.tableHeaderView = self.headerView;
-
-	}
+		[self setupUI];
 
 	return self;
+
+}
+
+
+- (void)viewDidLayoutSubviews {
+
+	[super viewDidLayoutSubviews];
+
+	[self layoutUI];
+
+}
+
+
+- (void)setupUI {
+
+	UIImage *icon = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/Amēlija@2x.png"];
+	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMBanner.png"];
+
+	headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,200,200)];
+	headerImageView = [UIImageView new];
+	headerImageView.image = banner;
+	headerImageView.contentMode = UIViewContentModeScaleAspectFill;
+	headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
+	[headerView addSubview:headerImageView];
+
+	UIButton *changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
+	changelogButton.tintColor = tint;
+	[changelogButton setImage : [UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
+	[changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
+
+	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
+	self.navigationItem.rightBarButtonItem = changelogButtonItem;
+
+	self.navigationItem.titleView = [UIView new];
+	iconView = [UIImageView new];
+	iconView.image = icon;
+	iconView.contentMode = UIViewContentModeScaleAspectFit;
+	iconView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.navigationItem.titleView addSubview:iconView];
+
+	_table.tableHeaderView = headerView;
+
+}
+
+
+- (void)layoutUI {
+
+	[iconView.topAnchor constraintEqualToAnchor : self.navigationItem.titleView.topAnchor].active = YES;
+	[iconView.bottomAnchor constraintEqualToAnchor : self.navigationItem.titleView.bottomAnchor].active = YES;
+	[iconView.leadingAnchor constraintEqualToAnchor : self.navigationItem.titleView.leadingAnchor].active = YES;
+	[iconView.trailingAnchor constraintEqualToAnchor : self.navigationItem.titleView.trailingAnchor].active = YES;
+
+	[headerImageView.topAnchor constraintEqualToAnchor : headerView.topAnchor].active = YES;
+	[headerImageView.bottomAnchor constraintEqualToAnchor : headerView.bottomAnchor].active = YES;
+	[headerImageView.leadingAnchor constraintEqualToAnchor : headerView.leadingAnchor].active = YES;
+	[headerImageView.trailingAnchor constraintEqualToAnchor : headerView.trailingAnchor].active = YES;
 
 }
 
@@ -74,9 +94,12 @@
 
 	AudioServicesPlaySystemSound(1521);
 
-	self.changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.4" icon:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMHotIcon.png"]];
+	UIImage *titleIconImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMHotIcon.png"];
+	UIImage *bulletedImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
 
-	[self.changelogController addBulletedListItemWithTitle:@"Code" description:@"Refactoring." image:[UIImage systemImageNamed:@"checkmark.circle.fill"]];
+	changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.5" icon:titleIconImage];
+
+	[changelogController addBulletedListItemWithTitle:@"Code" description:@"Fixed a linking issue in preferences causing the duo twitter cell to appear blank." image:bulletedImage];
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
@@ -84,63 +107,18 @@
 	backdropView.clipsToBounds = YES;
 	backdropView.layer.masksToBounds = YES;
 	backdropView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
+	[changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
 
-	[backdropView.bottomAnchor constraintEqualToAnchor : self.changelogController.viewIfLoaded.bottomAnchor].active = YES;
-	[backdropView.leadingAnchor constraintEqualToAnchor : self.changelogController.viewIfLoaded.leadingAnchor].active = YES;
-	[backdropView.trailingAnchor constraintEqualToAnchor : self.changelogController.viewIfLoaded.trailingAnchor].active = YES;
-	[backdropView.topAnchor constraintEqualToAnchor : self.changelogController.viewIfLoaded.topAnchor].active = YES;
+	[backdropView.topAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.topAnchor].active = YES;
+	[backdropView.bottomAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.bottomAnchor].active = YES;
+	[backdropView.leadingAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.leadingAnchor].active = YES;
+	[backdropView.trailingAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.trailingAnchor].active = YES;
 
-	self.changelogController.modalInPresentation = NO;
-	self.changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
-	self.changelogController.view.tintColor = [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00];
-	self.changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
-	[self presentViewController:self.changelogController animated:YES completion:nil];
-
-}
-
-
-- (void)dismissVC {
-
-	[self.changelogController dismissViewControllerAnimated:YES completion:nil];
-
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	tableView.tableHeaderView = self.headerView;
-	return [super tableView:tableView cellForRowAtIndexPath:indexPath];
-
-}
-
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-
-	CGFloat offsetY = scrollView.contentOffset.y;
-
-	if (offsetY > 0) offsetY = 0;
-
-	self.headerImageView.frame = CGRectMake(0, offsetY, self.headerView.frame.size.width, 200 - offsetY);
-
-}
-
-
-- (id)readPreferenceValue:(PSSpecifier*)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
-	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
-
-}
-
-
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
-	[settings setObject:value forKey:specifier.properties[@"key"]];
-	[settings writeToFile:takeMeThere atomically:YES];
+	changelogController.modalInPresentation = NO;
+	changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
+	changelogController.view.tintColor = tint;
+	changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
+	[self presentViewController:changelogController animated:YES completion:nil];
 
 }
 
@@ -149,9 +127,9 @@
 
 	AudioServicesPlaySystemSound(1521);
 
-	UIAlertController *resetAlert = [UIAlertController alertControllerWithTitle:@"Amēlija" message:@"Do you want to start fresh?" preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Amēlija" message:@"Do you want to start fresh?" preferredStyle:UIAlertControllerStyleAlert];
 
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 
 		NSFileManager *fileM = [NSFileManager defaultManager];
 
@@ -163,10 +141,10 @@
 
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Meh" style:UIAlertActionStyleCancel handler:nil];
 
-	[resetAlert addAction:confirmAction];
-	[resetAlert addAction:cancelAction];
+	[alertController addAction:confirmAction];
+	[alertController addAction:cancelAction];
 
-	[self presentViewController:resetAlert animated:YES completion:nil];
+	[self presentViewController:alertController animated:YES completion:nil];
 
 }
 
@@ -200,6 +178,36 @@
 	pid_t pid;
 	const char* args[] = {"sbreload", NULL, NULL, NULL};
 	posix_spawn(&pid, "/usr/bin/sbreload", NULL, NULL, (char* const*)args, NULL);
+
+}
+
+
+- (id)readPreferenceValue:(PSSpecifier *)specifier {
+
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
+
+}
+
+
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
+
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	[settings setObject:value forKey:specifier.properties[@"key"]];
+	[settings writeToFile:takeMeThere atomically:YES];
+
+}
+
+
+// Table view data source
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+	tableView.tableHeaderView = headerView;
+	return [super tableView:tableView cellForRowAtIndexPath:indexPath];
 
 }
 
@@ -270,7 +278,7 @@
 }
 
 
-- (id)readPreferenceValue:(PSSpecifier*)specifier {
+- (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
@@ -279,7 +287,7 @@
 }
 
 
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
@@ -382,7 +390,7 @@
 }
 
 
-- (id)readPreferenceValue:(PSSpecifier*)specifier {
+- (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
@@ -391,7 +399,7 @@
 }
 
 
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];

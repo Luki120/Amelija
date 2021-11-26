@@ -5,15 +5,12 @@
 #import <spawn.h>
 
 
-static NSString *takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
+static NSString *const takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
 
 #define tint [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00]
 
-UIBarButtonItem *changelogButtonItem;
-
 
 @interface OBButtonTray : UIView
-@property (nonatomic, strong) UIVisualEffectView *effectView;
 - (void)addButton:(id)arg1;
 - (void)addCaptionText:(id)arg1;
 @end
@@ -26,8 +23,6 @@ UIBarButtonItem *changelogButtonItem;
 
 
 @interface OBWelcomeController : UIViewController
-@property (nonatomic, strong) UIView *viewIfLoaded;
-@property (nonatomic, strong) UIColor *backgroundColor;
 @property (assign, nonatomic) BOOL _shouldInlineButtontray;
 - (OBButtonTray *)buttonTray;
 - (id)initWithTitle:(id)arg1 detailText:(id)arg2 icon:(id)arg3;
@@ -38,6 +33,7 @@ UIBarButtonItem *changelogButtonItem;
 @interface _UIBackdropViewSettings : NSObject
 + (id)settingsForStyle:(long long)arg1;
 @end
+
 
 @interface _UIBackdropView : UIView
 @property (assign, nonatomic) BOOL blurRadiusSetOnce;
@@ -52,31 +48,15 @@ UIBarButtonItem *changelogButtonItem;
 @end
 
 
+@interface AMLRootListController : PSListController
+@end
+
+
 @interface AmelijaLinksRootListController : PSListController
 @end
 
 
 @interface AmelijaContributorsRootListController : PSListController
-@end
-
-
-@interface AMLRootListController : PSListController {
-
-	UITableView * _table;
-
-}
-@property (nonatomic, strong) UIView *headerView;
-@property (nonatomic, strong) UIImageView *iconView;
-@property (nonatomic, strong) UIImageView *headerImageView;
-@property (nonatomic, strong) OBWelcomeController *changelogController;
-- (void)showWtfChangedInThisVersion:(UIButton *)sender;
-- (void)shatterThePrefsToPieces;
-- (void)respringMethod;
-@end
-
-
-@interface PSListController (Private)
-- (BOOL)containsSpecifier:(PSSpecifier *)arg1;
 @end
 
 
@@ -87,6 +67,11 @@ UIBarButtonItem *changelogButtonItem;
 
 @interface HSRootListController : PSListController
 @property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
+@end
+
+
+@interface PSListController (Private)
+- (BOOL)containsSpecifier:(PSSpecifier *)arg1;
 @end
 
 
