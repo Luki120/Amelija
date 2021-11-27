@@ -1,6 +1,6 @@
 BUNDLE_NAME = AmēlijaPrefs
 
-AmēlijaPrefs_FILES = AMLRootListController.m
+AmēlijaPrefs_FILES = AMLRootVC.m
 AmēlijaPrefs_CFLAGS = -fobjc-arc
 AmēlijaPrefs_LIBRARIES = gcuniversal
 AmēlijaPrefs_FRAMEWORKS = UIKit

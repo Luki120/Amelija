@@ -1,7 +1,7 @@
-#include "AMLRootListController.h"
+#import "AMLRootVC.h"
 
 
-@implementation AMLRootListController {
+@implementation AMLRootVC {
 
 	UITableView *_table;
 	UIImageView *iconView;
@@ -25,20 +25,9 @@
 
 	self = [super init];
 
-	if(self)
-
-		[self setupUI];
+	if(self) [self setupUI];
 
 	return self;
-
-}
-
-
-- (void)viewDidLayoutSubviews {
-
-	[super viewDidLayoutSubviews];
-
-	[self layoutUI];
 
 }
 
@@ -72,6 +61,8 @@
 
 	_table.tableHeaderView = headerView;
 
+	[self layoutUI];
+
 }
 
 
@@ -94,12 +85,12 @@
 
 	AudioServicesPlaySystemSound(1521);
 
-	UIImage *titleIconImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMHotIcon.png"];
-	UIImage *bulletedImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
+	UIImage *tweakIconImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMHotIcon.png"];
+	UIImage *checkmarkImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
 
-	changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.5" icon:titleIconImage];
+	changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.6" icon:tweakIconImage];
 
-	[changelogController addBulletedListItemWithTitle:@"Code" description:@"Fixed a linking issue in preferences causing the duo twitter cell to appear blank." image:bulletedImage];
+	[changelogController addBulletedListItemWithTitle:@"Code" description:@"Fixed the tweak icon appearing a second late due to some changes made in 1.0.5." image:checkmarkImage];
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
@@ -215,7 +206,7 @@
 @end
 
 
-@implementation LSRootListController
+@implementation LSRootVC
 
 
 - (NSArray *)specifiers {
@@ -331,7 +322,7 @@
 @end
 
 
-@implementation HSRootListController
+@implementation HSRootVC
 
 
 - (NSArray *)specifiers {
@@ -438,7 +429,22 @@
 @end
 
 
-@implementation AmelijaLinksRootListController
+@implementation AmelijaContributorsVC
+
+
+- (NSArray *)specifiers {
+
+	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"AmelijaContributors" target:self];
+
+	return _specifiers;
+
+}
+
+
+@end
+
+
+@implementation AmelijaLinksVC
 
 
 - (NSArray *)specifiers {
@@ -481,21 +487,6 @@
 - (void)meredith {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.meredith"] options:@{} completionHandler:nil];
-
-}
-
-
-@end
-
-
-@implementation AmelijaContributorsRootListController
-
-
-- (NSArray *)specifiers {
-
-	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"AmelijaContributors" target:self];
-
-	return _specifiers;
 
 }
 

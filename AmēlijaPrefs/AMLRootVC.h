@@ -10,21 +10,8 @@ static NSString *const takeMeThere = @"/var/mobile/Library/Preferences/me.luki.a
 #define tint [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00]
 
 
-@interface OBButtonTray : UIView
-- (void)addButton:(id)arg1;
-- (void)addCaptionText:(id)arg1;
-@end
-
-
-@interface OBBoldTrayButton : UIButton
-+ (id)buttonWithType:(long long)arg1;
-- (void)setTitle:(id)arg1 forState:(unsigned long long)arg2;
-@end
-
-
 @interface OBWelcomeController : UIViewController
 @property (assign, nonatomic) BOOL _shouldInlineButtontray;
-- (OBButtonTray *)buttonTray;
 - (id)initWithTitle:(id)arg1 detailText:(id)arg2 icon:(id)arg3;
 - (void)addBulletedListItemWithTitle:(id)arg1 description:(id)arg2 image:(id)arg3;
 @end
@@ -44,29 +31,29 @@ static NSString *const takeMeThere = @"/var/mobile/Library/Preferences/me.luki.a
 @end
 
 
+@interface AMLRootVC : PSListController
+@end
+
+
+@interface LSRootVC : PSListController
+@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
+@end
+
+
+@interface HSRootVC : PSListController
+@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
+@end
+
+
+@interface AmelijaLinksVC : PSListController
+@end
+
+
+@interface AmelijaContributorsVC : PSListController
+@end
+
+
 @interface AmelijaTableCell : PSTableCell
-@end
-
-
-@interface AMLRootListController : PSListController
-@end
-
-
-@interface AmelijaLinksRootListController : PSListController
-@end
-
-
-@interface AmelijaContributorsRootListController : PSListController
-@end
-
-
-@interface LSRootListController : PSListController
-@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
-@end
-
-
-@interface HSRootListController : PSListController
-@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
 @end
 
 

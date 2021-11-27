@@ -28,7 +28,7 @@
 				<key>cell</key>
 				<string>PSLinkCell</string>
 				<key>detail</key>
-				<string>LSRootListController</string>
+				<string>LSRootVC</string>
 				<key>isController</key>
 				<true/>
 				<key>label</key>
@@ -38,7 +38,7 @@
 				<key>cell</key>
 				<string>PSLinkCell</string>
 				<key>detail</key>
-				<string>HSRootListController</string>
+				<string>HSRootVC</string>
 				<key>isController</key>
 				<true/>
 				<key>label</key>
