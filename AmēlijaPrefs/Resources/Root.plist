@@ -68,7 +68,7 @@
 				<key>cellClass</key>
 				<string>AmelijaTableCell</string>
 				<key>detail</key>
-				<string>AmelijaContributorsRootListController</string>
+				<string>AmelijaContributorsVC</string>
 				<key>isController</key>
 				<true/>
 				<key>label</key>
@@ -84,7 +84,7 @@
 				<key>cellClass</key>
 				<string>AmelijaTableCell</string>
 				<key>detail</key>
-				<string>AmelijaLinksRootListController</string>
+				<string>AmelijaLinksVC</string>
 				<key>isController</key>
 				<true/>
 				<key>label</key>
