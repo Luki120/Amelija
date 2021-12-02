@@ -47,7 +47,7 @@
 	UIButton *changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
 	changelogButton.tintColor = tint;
 	[changelogButton setImage : [UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
-	[changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion:) forControlEvents:UIControlEventTouchUpInside];
+	[changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion) forControlEvents:UIControlEventTouchUpInside];
 
 	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
 	self.navigationItem.rightBarButtonItem = changelogButtonItem;
@@ -81,16 +81,16 @@
 }
 
 
-- (void)showWtfChangedInThisVersion:(id)sender {
+- (void)showWtfChangedInThisVersion {
 
 	AudioServicesPlaySystemSound(1521);
 
 	UIImage *tweakIconImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMHotIcon.png"];
 	UIImage *checkmarkImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
 
-	changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.6" icon:tweakIconImage];
+	changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.7" icon:tweakIconImage];
 
-	[changelogController addBulletedListItemWithTitle:@"Code" description:@"Fixed the tweak icon appearing a second late due to some changes made in 1.0.5." image:checkmarkImage];
+	[changelogController addBulletedListItemWithTitle:@"Code" description:@"Fixed contributors & links page." image:checkmarkImage];
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
@@ -157,14 +157,14 @@
 
 	} completion:^(BOOL finished) {
 
-		[self respringMethod];
+		[self launchRespring];
 
 	}];
 
 }
 
 
-- (void)respringMethod {
+- (void)launchRespring {
 
 	pid_t pid;
 	const char* args[] = {"sbreload", NULL, NULL, NULL};
@@ -193,7 +193,6 @@
 
 
 // Table view data source
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -456,35 +455,35 @@
 }
 
 
-- (void)discord {
+- (void)launchDiscord {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://discord.gg/jbE3avwSHs"] options:@{} completionHandler:nil];
 
 }
 
 
-- (void)paypal {
+- (void)launchPayPal {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://paypal.me/Luki120"] options:@{} completionHandler:nil];
 
 }
 
 
-- (void)github {
+- (void)launchGitHub {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://github.com/Luki120/Amelija"] options:@{} completionHandler:nil];
 
 }
 
 
-- (void)april {
+- (void)launchApril {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.april"] options:@{} completionHandler:nil];
 
 }
 
 
-- (void)meredith {
+- (void)launchMeredith {
 
 	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://repo.twickd.com/get/com.twickd.luki120.meredith"] options:@{} completionHandler:nil];
 
