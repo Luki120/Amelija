@@ -7,7 +7,7 @@
 
 static NSString *const takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
 
-#define tint [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.00]
+#define AmelijaTintColor [UIColor colorWithRed: 0.47 green: 0.21 blue: 0.24 alpha: 1.0]
 
 
 @interface OBWelcomeController : UIViewController

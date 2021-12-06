@@ -45,7 +45,7 @@
 	[headerView addSubview:headerImageView];
 
 	UIButton *changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
-	changelogButton.tintColor = tint;
+	changelogButton.tintColor = AmelijaTintColor;
 	[changelogButton setImage : [UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
 	[changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion) forControlEvents:UIControlEventTouchUpInside];
 
@@ -107,7 +107,7 @@
 
 	changelogController.modalInPresentation = NO;
 	changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
-	changelogController.view.tintColor = tint;
+	changelogController.view.tintColor = AmelijaTintColor;
 	changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
 	[self presentViewController:changelogController animated:YES completion:nil];
 
@@ -126,7 +126,7 @@
 
 		BOOL success = [fileM removeItemAtPath:@"var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist" error:nil];
 
-		if(success) [self blurEffect];
+		if(success) [self crossDissolveBlur];
 
 	}];
 
@@ -140,7 +140,7 @@
 }
 
 
-- (void)blurEffect {
+- (void)crossDissolveBlur {
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
@@ -151,7 +151,7 @@
 	backdropView.layer.masksToBounds = YES;
 	[self.view addSubview:backdropView];
 
-	[UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+	[UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
 		backdropView.alpha = 1;
 
@@ -496,26 +496,11 @@
 @implementation AmelijaTableCell
 
 
-- (void)tintColorDidChange {
+- (void)setTitle:(NSString *)t {
 
-	[super tintColorDidChange];
+	[super setTitle:t];
 
-	self.textLabel.textColor = tint;
-	self.textLabel.highlightedTextColor = tint;
-
-}
-
-
-- (void)refreshCellContentsWithSpecifier:(PSSpecifier *)specifier {
-
-	[super refreshCellContentsWithSpecifier:specifier];
-
-	if([self respondsToSelector:@selector(tintColor)]) {
-
-		self.textLabel.textColor = tint;
-		self.textLabel.highlightedTextColor = tint;
-
-	}
+	self.titleLabel.textColor = AmelijaTintColor;
 
 }
 
