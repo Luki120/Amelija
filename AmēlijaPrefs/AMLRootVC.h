@@ -53,6 +53,11 @@ static NSString *const takeMeThere = @"/var/mobile/Library/Preferences/me.luki.a
 @end
 
 
+@interface PSTableCell ()
+- (void)setTitle:(NSString *)t;
+@end
+
+
 @interface AmelijaTableCell : PSTableCell
 @end
 
