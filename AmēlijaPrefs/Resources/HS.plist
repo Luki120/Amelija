@@ -28,7 +28,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>id</key>
-				<string>GroupCell-7</string>
+				<string>GroupCell-1</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -74,7 +74,7 @@
 				<key>label</key>
 				<string>This slider controls the intensity (alpha) of the blur</string>
 				<key>id</key>
-				<string>GroupCell-8</string>
+				<string>GroupCell-2</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -92,7 +92,7 @@
 				<key>showValue</key>
 				<true/>
 				<key>id</key>
-				<string>SliderCell-4</string>
+				<string>BlurSliderCell</string>
 			</dict>
 		</array>
 		<key>title</key>

@@ -202,11 +202,11 @@
 	_specifiers = [self loadSpecifiersFromPlistName:@"LS" target:self];
 
 	NSArray *chosenIDs = @[
-		@"GroupCell-3",
+		@"GroupCell-1",
 		@"MiscLSBlursList",
-		@"GroupCell-4",
-		@"SliderCell-2",
-		@"GroupCell-5",
+		@"GroupCell-2",
+		@"BlurSliderCell",
+		@"GroupCell-3",
 		@"BlurOnlyWithNotifsSwitch"
 	];
 
@@ -223,39 +223,25 @@
 }
 
 
-- (void)reloadSpecifiers { // Dynamic specifiers
-
-	[super reloadSpecifiers];
-
-	if(![[self readPreferenceValue:[self specifierForID:@"MiscLSBlursSwitch"]] boolValue]) {
-
-		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-3"] animated:NO];
-		[self removeSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] animated:NO];
-		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-4"] animated:NO];
-		[self removeSpecifier:self.savedSpecifiers[@"SliderCell-2"] animated:NO];
-		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-5"] animated:NO];
-		[self removeSpecifier:self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"] animated:NO];
-
-	}
-
-	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-3"]]) {
-
-		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-3"] afterSpecifierID:@"MiscLSBlursSwitch" animated:NO];
-		[self insertSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] afterSpecifierID:@"GroupCell-3" animated:NO];
-		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-4"] afterSpecifierID:@"MiscLSBlursList" animated:NO];
-		[self insertSpecifier:self.savedSpecifiers[@"SliderCell-2"] afterSpecifierID:@"GroupCell-4" animated:NO];
-		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-5"] afterSpecifierID:@"SliderCell-2" animated:NO];
-		[self insertSpecifier:self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"] afterSpecifierID:@"GroupCell-5" animated:NO];
-
-	}
-
-}
-
-
 - (void)viewDidLoad {
 
 	[super viewDidLoad];
 	[self reloadSpecifiers];
+
+}
+
+
+- (void)reloadSpecifiers { // Dynamic specifiers
+
+	[super reloadSpecifiers];
+
+	if(![[self readPreferenceValue:[self specifierForID:@"MiscLSBlursSwitch"]] boolValue])
+
+		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"MiscLSBlursList"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"BlurSliderCell"], self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"]] animated:NO];
+
+	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]])
+
+		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"MiscLSBlursList"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"BlurSliderCell"], self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"]] afterSpecifierID:@"MiscLSBlursSwitch" animated:NO];
 
 }
 
@@ -285,27 +271,13 @@
 
 	if([key isEqualToString:@"lsBlur"]) {
 
-		if(![value boolValue]) {
+		if(![value boolValue])
 
-			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-3"] animated:YES];
-			[self removeSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] animated:YES];
-			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-4"] animated:YES];
-			[self removeSpecifier:self.savedSpecifiers[@"SliderCell-2"] animated:YES];
-			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-5"] animated:YES];
-			[self removeSpecifier:self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"] animated:YES];
+			[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"MiscLSBlursList"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"BlurSliderCell"], self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"]] animated:YES];
 
-		}
+		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]])
 
-		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-3"]]) {
-
-			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-3"] afterSpecifierID:@"MiscLSBlursSwitch" animated:YES];
-			[self insertSpecifier:self.savedSpecifiers[@"MiscLSBlursList"] afterSpecifierID:@"GroupCell-3" animated:YES];
-			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-4"] afterSpecifierID:@"MiscLSBlursList" animated:YES];
-			[self insertSpecifier:self.savedSpecifiers[@"SliderCell-2"] afterSpecifierID:@"GroupCell-4" animated:YES];
-			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-5"] afterSpecifierID:@"SliderCell-2" animated:YES];
-			[self insertSpecifier:self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"] afterSpecifierID:@"GroupCell-5" animated:YES];
-
-		}
+			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"MiscLSBlursList"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"BlurSliderCell"], self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"BlurOnlyWithNotifsSwitch"]] afterSpecifierID:@"MiscLSBlursSwitch" animated:YES];
 
 	}
 
@@ -322,10 +294,10 @@
 	_specifiers = [self loadSpecifiersFromPlistName:@"HS" target:self];
 
 	NSArray *chosenIDs = @[
-		@"GroupCell-7",
+		@"GroupCell-1",
 		@"MiscHSBlursList",
-		@"GroupCell-8",
-		@"SliderCell-4"
+		@"GroupCell-2",
+		@"BlurSliderCell"
 	];
 
 	self.savedSpecifiers = self.savedSpecifiers ?: [NSMutableDictionary new];
@@ -341,35 +313,26 @@
 }
 
 
-- (void)reloadSpecifiers { // Dynamic specifiers
-
-	[super reloadSpecifiers];
-
-	if(![[self readPreferenceValue:[self specifierForID:@"MiscHSBlursSwitch"]] boolValue]) {
-
-		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-7"] animated:NO];
-		[self removeSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] animated:NO];
-		[self removeSpecifier:self.savedSpecifiers[@"GroupCell-8"] animated:NO];
-		[self removeSpecifier:self.savedSpecifiers[@"SliderCell-4"] animated:NO];
-
-	}
-
-	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-7"]]) {
-
-		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-7"] afterSpecifierID:@"MiscHSBlursSwitch" animated:NO];
-		[self insertSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] afterSpecifierID:@"GroupCell-7" animated:NO];
-		[self insertSpecifier:self.savedSpecifiers[@"GroupCell-8"] afterSpecifierID:@"MiscHSBlursList" animated:NO];
-		[self insertSpecifier:self.savedSpecifiers[@"SliderCell-4"] afterSpecifierID:@"GroupCell-8" animated:NO];
-
-	}
-
-}
-
-
 - (void)viewDidLoad {
 
 	[super viewDidLoad];
 	[self reloadSpecifiers];
+
+}
+
+
+- (void)reloadSpecifiers { // Dynamic specifiers
+
+	[super reloadSpecifiers];
+
+	if(![[self readPreferenceValue:[self specifierForID:@"MiscHSBlursSwitch"]] boolValue])
+
+		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"MiscHSBlursList"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"BlurSliderCell"]] animated:NO];
+
+	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]])
+
+		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"MiscHSBlursList"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"BlurSliderCell"]] afterSpecifierID:@"MiscHSBlursSwitch" animated:NO];
+
 
 }
 
@@ -398,23 +361,13 @@
 
 	if([key isEqualToString:@"hsBlur"]) {
 
-		if(![value boolValue]) {
+		if(![value boolValue])
 
-			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-7"] animated:YES];
-			[self removeSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] animated:YES];
-			[self removeSpecifier:self.savedSpecifiers[@"GroupCell-8"] animated:YES];
-			[self removeSpecifier:self.savedSpecifiers[@"SliderCell-4"] animated:YES];
+			[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"MiscHSBlursList"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"BlurSliderCell"]] animated:YES];
 
-		}
+		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]])
 
-		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-7"]]) {
-
-			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-7"] afterSpecifierID:@"MiscHSBlursSwitch" animated:YES];
-			[self insertSpecifier:self.savedSpecifiers[@"MiscHSBlursList"] afterSpecifierID:@"GroupCell-7" animated:YES];
-			[self insertSpecifier:self.savedSpecifiers[@"GroupCell-8"] afterSpecifierID:@"MiscHSBlursList" animated:YES];
-			[self insertSpecifier:self.savedSpecifiers[@"SliderCell-4"] afterSpecifierID:@"GroupCell-8" animated:YES];
-
-		}
+			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"MiscHSBlursList"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"BlurSliderCell"]] afterSpecifierID:@"MiscHSBlursSwitch" animated:YES];
 
 	}
 
