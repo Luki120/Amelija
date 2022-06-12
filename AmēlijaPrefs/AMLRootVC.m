@@ -3,9 +3,8 @@
 
 @implementation AMLRootVC {
 
-	UITableView *_table;
-	UIImageView *iconView;
 	UIView *headerView;
+	UIImageView *iconView;
 	UIImageView *headerImageView;
 	OBWelcomeController *changelogController;
 
@@ -15,7 +14,6 @@
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
-
 	return _specifiers;
 
 }
@@ -24,9 +22,7 @@
 - (id)init {
 
 	self = [super init];
-
 	if(self) [self setupUI];
-
 	return self;
 
 }
@@ -41,15 +37,16 @@
 	headerImageView = [UIImageView new];
 	headerImageView.image = banner;
 	headerImageView.contentMode = UIViewContentModeScaleAspectFill;
+	headerImageView.clipsToBounds = YES;
 	headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-	[headerView addSubview:headerImageView];
+	[headerView addSubview: headerImageView];
 
-	UIButton *changelogButton =  [UIButton buttonWithType:UIButtonTypeCustom];
-	changelogButton.tintColor = AmelijaTintColor;
-	[changelogButton setImage : [UIImage systemImageNamed:@"atom"] forState:UIControlStateNormal];
-	[changelogButton addTarget : self action:@selector(showWtfChangedInThisVersion) forControlEvents:UIControlEventTouchUpInside];
+	UIButton *changelogButton =  [UIButton new];
+	changelogButton.tintColor = kAmelijaTintColor;
+	[changelogButton setImage:[UIImage systemImageNamed:@"atom"] forState: UIControlStateNormal];
+	[changelogButton addTarget:self action:@selector(showWtfChangedInThisVersion) forControlEvents: UIControlEventTouchUpInside];
 
-	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:changelogButton];
+	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView: changelogButton];
 	self.navigationItem.rightBarButtonItem = changelogButtonItem;
 
 	self.navigationItem.titleView = [UIView new];
@@ -57,9 +54,7 @@
 	iconView.image = icon;
 	iconView.contentMode = UIViewContentModeScaleAspectFit;
 	iconView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.navigationItem.titleView addSubview:iconView];
-
-	_table.tableHeaderView = headerView;
+	[self.navigationItem.titleView addSubview: iconView];
 
 	[self layoutUI];
 
@@ -68,15 +63,15 @@
 
 - (void)layoutUI {
 
-	[iconView.topAnchor constraintEqualToAnchor : self.navigationItem.titleView.topAnchor].active = YES;
-	[iconView.bottomAnchor constraintEqualToAnchor : self.navigationItem.titleView.bottomAnchor].active = YES;
-	[iconView.leadingAnchor constraintEqualToAnchor : self.navigationItem.titleView.leadingAnchor].active = YES;
-	[iconView.trailingAnchor constraintEqualToAnchor : self.navigationItem.titleView.trailingAnchor].active = YES;
+	[iconView.topAnchor constraintEqualToAnchor: self.navigationItem.titleView.topAnchor].active = YES;
+	[iconView.bottomAnchor constraintEqualToAnchor: self.navigationItem.titleView.bottomAnchor].active = YES;
+	[iconView.leadingAnchor constraintEqualToAnchor: self.navigationItem.titleView.leadingAnchor].active = YES;
+	[iconView.trailingAnchor constraintEqualToAnchor: self.navigationItem.titleView.trailingAnchor].active = YES;
 
-	[headerImageView.topAnchor constraintEqualToAnchor : headerView.topAnchor].active = YES;
-	[headerImageView.bottomAnchor constraintEqualToAnchor : headerView.bottomAnchor].active = YES;
-	[headerImageView.leadingAnchor constraintEqualToAnchor : headerView.leadingAnchor].active = YES;
-	[headerImageView.trailingAnchor constraintEqualToAnchor : headerView.trailingAnchor].active = YES;
+	[headerImageView.topAnchor constraintEqualToAnchor: headerView.topAnchor].active = YES;
+	[headerImageView.bottomAnchor constraintEqualToAnchor: headerView.bottomAnchor].active = YES;
+	[headerImageView.leadingAnchor constraintEqualToAnchor: headerView.leadingAnchor].active = YES;
+	[headerImageView.trailingAnchor constraintEqualToAnchor: headerView.trailingAnchor].active = YES;
 
 }
 
@@ -88,9 +83,8 @@
 	UIImage *tweakIconImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMHotIcon.png"];
 	UIImage *checkmarkImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
 
-	changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.0.7" icon:tweakIconImage];
-
-	[changelogController addBulletedListItemWithTitle:@"Code" description:@"Fixed contributors & links page." image:checkmarkImage];
+	changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.1" icon:tweakIconImage];
+	[changelogController addBulletedListItemWithTitle:@"Code" description:@"Refactoring." image:checkmarkImage];
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
@@ -100,14 +94,14 @@
 	backdropView.translatesAutoresizingMaskIntoConstraints = NO;
 	[changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
 
-	[backdropView.topAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.topAnchor].active = YES;
-	[backdropView.bottomAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.bottomAnchor].active = YES;
-	[backdropView.leadingAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.leadingAnchor].active = YES;
-	[backdropView.trailingAnchor constraintEqualToAnchor : changelogController.viewIfLoaded.trailingAnchor].active = YES;
+	[backdropView.topAnchor constraintEqualToAnchor: changelogController.viewIfLoaded.topAnchor].active = YES;
+	[backdropView.bottomAnchor constraintEqualToAnchor: changelogController.viewIfLoaded.bottomAnchor].active = YES;
+	[backdropView.leadingAnchor constraintEqualToAnchor: changelogController.viewIfLoaded.leadingAnchor].active = YES;
+	[backdropView.trailingAnchor constraintEqualToAnchor: changelogController.viewIfLoaded.trailingAnchor].active = YES;
 
 	changelogController.modalInPresentation = NO;
 	changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
-	changelogController.view.tintColor = AmelijaTintColor;
+	changelogController.view.tintColor = kAmelijaTintColor;
 	changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
 	[self presentViewController:changelogController animated:YES completion:nil];
 
@@ -119,21 +113,19 @@
 	AudioServicesPlaySystemSound(1521);
 
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Amēlija" message:@"Do you want to start fresh?" preferredStyle:UIAlertControllerStyleAlert];
-
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 
 		NSFileManager *fileM = [NSFileManager defaultManager];
 
-		BOOL success = [fileM removeItemAtPath:@"var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist" error:nil];
-
-		if(success) [self crossDissolveBlur];
+		[fileM removeItemAtPath:@"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist" error:nil];
+		[self crossDissolveBlur];
 
 	}];
 
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Meh" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Meh" style:UIAlertActionStyleDefault handler:nil];
 
-	[alertController addAction:confirmAction];
-	[alertController addAction:cancelAction];
+	[alertController addAction: confirmAction];
+	[alertController addAction: cancelAction];
 
 	[self presentViewController:alertController animated:YES completion:nil];
 
@@ -149,17 +141,13 @@
 	backdropView.frame = self.view.bounds;
 	backdropView.clipsToBounds = YES;
 	backdropView.layer.masksToBounds = YES;
-	[self.view addSubview:backdropView];
+	[self.view addSubview: backdropView];
 
 	[UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
 		backdropView.alpha = 1;
 
-	} completion:^(BOOL finished) {
-
-		[self launchRespring];
-
-	}];
+	} completion:^(BOOL finished) { [self launchRespring]; }];
 
 }
 
@@ -176,7 +164,7 @@
 - (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
 	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
 
 }
@@ -185,9 +173,11 @@
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];
-	[settings writeToFile:takeMeThere atomically:YES];
+	[settings writeToFile:kPath atomically:YES];
+
+	[super setPreferenceValue:value specifier:specifier];
 
 }
 
@@ -201,30 +191,32 @@
 
 }
 
-
 @end
 
 
 @implementation LSRootVC
 
-
 - (NSArray *)specifiers {
 
-	if(!_specifiers) {
+	if(_specifiers) return nil;
+	_specifiers = [self loadSpecifiersFromPlistName:@"LS" target:self];
 
-		_specifiers = [self loadSpecifiersFromPlistName:@"LS" target:self];
+	NSArray *chosenIDs = @[
+		@"GroupCell-3",
+		@"MiscLSBlursList",
+		@"GroupCell-4",
+		@"SliderCell-2",
+		@"GroupCell-5",
+		@"BlurOnlyWithNotifsSwitch"
+	];
 
-		NSArray *chosenIDs = @[@"GroupCell-3", @"MiscLSBlursList", @"GroupCell-4", @"SliderCell-2", @"GroupCell-5", @"BlurOnlyWithNotifsSwitch"];
+	self.savedSpecifiers = self.savedSpecifiers ?: [NSMutableDictionary new];
 
-		self.savedSpecifiers = (self.savedSpecifiers) ?: [NSMutableDictionary new];
+	for(PSSpecifier *specifier in _specifiers)
 
-		for(PSSpecifier *specifier in _specifiers)
+		if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
 
-			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
-
-				[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-
-	}
+			[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
 
 	return _specifiers;
 
@@ -271,7 +263,7 @@
 - (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
 	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
 
 }
@@ -280,12 +272,14 @@
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];
-	[settings writeToFile:takeMeThere atomically:YES];
+	[settings writeToFile:kPath atomically:YES];
 
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"lsBlurApplied" object:nil];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+
+	[super setPreferenceValue:value specifier:specifier];
 
 	NSString *key = [specifier propertyForKey:@"key"];
 
@@ -317,30 +311,30 @@
 
 }
 
-
 @end
 
 
 @implementation HSRootVC
 
-
 - (NSArray *)specifiers {
 
-	if(!_specifiers) {
+	if(_specifiers) return nil;
+	_specifiers = [self loadSpecifiersFromPlistName:@"HS" target:self];
 
-		_specifiers = [self loadSpecifiersFromPlistName:@"HS" target:self];
+	NSArray *chosenIDs = @[
+		@"GroupCell-7",
+		@"MiscHSBlursList",
+		@"GroupCell-8",
+		@"SliderCell-4"
+	];
 
-		NSArray *chosenIDs = @[@"GroupCell-7", @"MiscHSBlursList", @"GroupCell-8", @"SliderCell-4"];
+	self.savedSpecifiers = self.savedSpecifiers ?: [NSMutableDictionary new];
 
-		self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
+	for(PSSpecifier *specifier in _specifiers)
 
-		for(PSSpecifier *specifier in _specifiers)
+		if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
 
-			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
-
-				[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-
-	}
+			[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
 
 	return _specifiers;
 
@@ -383,7 +377,7 @@
 - (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:kPath]];
 	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
 
 }
@@ -392,11 +386,13 @@
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:takeMeThere]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:kPath]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];
-	[settings writeToFile:takeMeThere atomically:YES];
+	[settings writeToFile:kPath atomically:YES];
 
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"hsBlurApplied" object:nil];
+
+	[super setPreferenceValue:value specifier:specifier];
 
 	NSString *key = [specifier propertyForKey:@"key"];
 
@@ -424,32 +420,26 @@
 
 }
 
-
 @end
 
 
 @implementation AmelijaContributorsVC
 
-
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"AmelijaContributors" target:self];
-
 	return _specifiers;
 
 }
-
 
 @end
 
 
 @implementation AmelijaLinksVC
 
-
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"AmelijaLinks" target:self];
-
 	return _specifiers;
 
 }
@@ -489,20 +479,16 @@
 
 }
 
-
 @end
 
 
 @implementation AmelijaTableCell
 
-
 - (void)setTitle:(NSString *)t {
 
 	[super setTitle:t];
-
-	self.titleLabel.textColor = AmelijaTintColor;
+	self.titleLabel.textColor = kAmelijaTintColor;
 
 }
-
 
 @end

@@ -1,55 +1,4 @@
-@import UIKit;
-
-
-// LS
-
-static BOOL lsBlur;
-static BOOL blurIfNotifs;
-
-static int lsBlurType;
-
-static float lsIntensity = 1.0f;
-
-static UIBlurEffect *lsBlurEffect;
-
-static int notificationCount = 0;
-static NSInteger axonCellCount = 0;
-static NSInteger takoCellCount = 0;
-
-
-// HS
-
-static BOOL hsBlur;
-
-static int hsBlurType;
-
-static float hsIntensity = 1.0f;
-
-static UIBlurEffect *hsBlurEffect;
-
-
-static NSString *const takeMeThere = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
-#define kTakoExists [[NSFileManager defaultManager] fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/Tako.dylib"]
-
-
-@interface _UIBackdropViewSettings : NSObject
-+ (id)settingsForStyle:(long long)arg1;
-@end
-
-
-@interface _UIBackdropView : UIView
-@property (assign, nonatomic) BOOL blurRadiusSetOnce;
-@property (copy, nonatomic) NSString *_blurQuality;
-@property (assign, nonatomic) double _blurRadius;
-- (id)initWithSettings:(id)arg1;
-- (id)initWithFrame:(CGRect)arg1 autosizesToFitSuperview:(BOOL)arg2 settings:(id)arg3;
-@end
-
-
-@interface NSDistributedNotificationCenter : NSNotificationCenter
-+ (instancetype)defaultCenter;
-- (void)postNotificationName:(NSString *)name object:(NSString *)object userInfo:(NSDictionary *)userInfo;
-@end
+#import "Headers/Prefs.h"
 
 
 @interface CSCoverSheetViewController : UIViewController
@@ -57,6 +6,8 @@ static NSString *const takeMeThere = @"/var/mobile/Library/Preferences/me.luki.a
 @property (nonatomic, strong) _UIBackdropView *gaussianBlurView;
 - (void)unleashThatLSBlur;
 - (void)showBlurIfNotifsPresent;
+- (void)fadeInBlur;
+- (void)fadeOutBlur;
 @end
 
 
@@ -69,6 +20,7 @@ static NSString *const takeMeThere = @"/var/mobile/Library/Preferences/me.luki.a
 
 @interface NCNotificationMasterList : NSObject
 @property (assign, nonatomic) NSInteger notificationCount;
+- (void)postNotif;
 @end
 
 
@@ -80,42 +32,57 @@ static NSString *const takeMeThere = @"/var/mobile/Library/Preferences/me.luki.a
 @end
 
 
-static void loadPrefs() {
+// Reusable
 
-	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeThere];
-	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
+static UIView *blurView(UIViewController *self, CGFloat alpha) {
 
-	lsBlur = prefs[@"lsBlur"] ? [prefs[@"lsBlur"] boolValue] : NO;
-	blurIfNotifs = prefs[@"blurIfNotifs"] ? [prefs[@"blurIfNotifs"] boolValue] : NO;
-	lsBlurType = prefs[@"lsBlurType"] ? [prefs[@"lsBlurType"] integerValue] : 0;
-	lsIntensity = prefs[@"lsIntensity"] ? [prefs[@"lsIntensity"] floatValue] : 1.0f;
+	UIView *blurView = [[UIVisualEffectView alloc] initWithEffect: blurEffect];
+	blurView.tag = 1337;
+	blurView.alpha = alpha;
+	blurView.frame = self.view.bounds;
+	blurView.clipsToBounds = YES;
+	blurView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[self.view insertSubview:blurView atIndex:0];
 
-	hsBlur = prefs[@"hsBlur"] ? [prefs[@"hsBlur"] boolValue] : NO;
-	hsBlurType = prefs[@"hsBlurType"] ? [prefs[@"hsBlurType"] integerValue] : 0;
-	hsIntensity = prefs[@"hsIntensity"] ? [prefs[@"hsIntensity"] floatValue] : 1.0f;
+	return blurView;
+
+}
+
+static _UIBackdropView *gaussianBlurView(UIViewController *self, CGFloat alpha) {
+
+	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+		
+	_UIBackdropView *gaussianBlurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
+	gaussianBlurView.tag = 1337;
+	gaussianBlurView.alpha = alpha;
+	gaussianBlurView._blurQuality = @"high";
+	gaussianBlurView.blurRadiusSetOnce = NO;
+	[self.view insertSubview:gaussianBlurView atIndex:0];
+
+	return gaussianBlurView;
+
+}
+
+static void blurType(NSInteger blurType) {
+
+	switch(blurType) {
+		case 1: blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]; break;
+		case 2: blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]; break;
+		case 3: blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular]; break;
+		case 4: blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent]; break;
+		case 5: blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemThinMaterial]; break;
+		case 6: blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemUltraThinMaterial]; break;
+		case 7: blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemChromeMaterial]; break;
+	}
 
 }
 
 
-/*
+static NSInteger (*origAxonNumberOfItemsInSection)(id self, SEL _cmd, id collectionView, NSInteger);
 
-Axon support smh, only because I love your creation Nepeta,
-thank you so much for this gem. Hope you come back some day.
-Lmao I'm writing this like if she's ever gonna come here,
-anyways here's the magic, and we gotta do it kinda the old school way
-because otherwise due to Amēlija being alphabetically before Axon
-in the loading process, normal hooks loaded in the constructor wouldn't
-take any effect, so that's why we pass a message with MSHookMessageEx
-so we can control when to load it. And no, fuck dlopen, this is better
+static NSInteger overrideAxonNumberOfItemsInSection(id self, SEL _cmd, id collectionView, NSInteger section) {
 
-*/
-
-
-static NSInteger (*origNumberOfCells)(id self, SEL _cmd, id collectionView, NSInteger section);
-
-NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section) {
-
-	axonCellCount = origNumberOfCells(self, _cmd, collectionView, section);
+	axonCellCount = origAxonNumberOfItemsInSection(self, _cmd, collectionView, section);
 
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
 
@@ -123,11 +90,11 @@ NSInteger numberOfCells(id self, SEL _cmd, id collectionView, NSInteger section)
 
 }
 
-static NSInteger (*takoOrigNumberOfCells)(id self, SEL _cmd, id collectionView, NSInteger section);
+static NSInteger (*origTakoNumberOfItemsInSection)(id self, SEL _cmd, id collectionView, NSInteger);
 
-NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger section) {
+static NSInteger overrideTakoNumberOfItemsInSection(id self, SEL _cmd, id collectionView, NSInteger section) {
 
-	takoCellCount = takoOrigNumberOfCells(self, _cmd, collectionView, section);
+	takoCellCount = origTakoNumberOfItemsInSection(self, _cmd, collectionView, section);
 
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
 
@@ -143,15 +110,13 @@ NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger sect
 
 	%orig;
 
-	MSHookMessageEx(%c(AXNView), @selector(collectionView:numberOfItemsInSection:), (IMP) &numberOfCells, (IMP *) &origNumberOfCells);
-	MSHookMessageEx(%c(TKOView), @selector(collectionView:numberOfItemsInSection:), (IMP) &takoNumberOfCells, (IMP *) &takoOrigNumberOfCells);
+	MSHookMessageEx(%c(AXNView), @selector(collectionView:numberOfItemsInSection:), (IMP) &overrideAxonNumberOfItemsInSection, (IMP *) &origAxonNumberOfItemsInSection);
+	MSHookMessageEx(%c(TKOView), @selector(collectionView:numberOfItemsInSection:), (IMP) &overrideTakoNumberOfItemsInSection, (IMP *) &origTakoNumberOfItemsInSection);
 
 }
 
 
 %end
-
-
 
 
 %hook NCNotificationMasterList
@@ -160,9 +125,7 @@ NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger sect
 - (void)removeNotificationRequest:(id)arg1 { // get notification count in a reliable way
 
 	%orig;
-
-	notificationCount = [self notificationCount];
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+	[self postNotif];
 
 }
 
@@ -170,9 +133,7 @@ NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger sect
 - (void)insertNotificationRequest:(id)arg1 {
 
 	%orig;
-
-	notificationCount = [self notificationCount];
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+	[self postNotif];
 
 }
 
@@ -180,15 +141,22 @@ NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger sect
 - (void)modifyNotificationRequest:(id)arg1 {
 
 	%orig;
+	[self postNotif];
+
+}
+
+
+%new
+
+- (void)postNotif {
 
 	notificationCount = [self notificationCount];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
 
 }
 
+
 %end
-
-
 
 
 %hook CSCoverSheetViewController
@@ -210,14 +178,7 @@ NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger sect
 
 	if(lsBlurType == 0) {
 
-		_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
-			
-		self.gaussianBlurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
-		self.gaussianBlurView.tag = 1337;
-		self.gaussianBlurView.alpha = lsIntensity;
-		self.gaussianBlurView._blurQuality = @"high";
-		self.gaussianBlurView.blurRadiusSetOnce = NO;
-		[self.view insertSubview:self.gaussianBlurView atIndex:0];
+		self.gaussianBlurView = gaussianBlurView(self, lsIntensity);
 
 		if(blurIfNotifs && notificationCount == 0) self.gaussianBlurView.alpha = 0;
 
@@ -225,58 +186,9 @@ NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger sect
 
 	else {
 
-		switch(lsBlurType) {
+		blurType(lsBlurType);
 
-			case 1:
-
-				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-				break;
-
-
-			case 2:
-
-				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-				break;
-
-
-			case 3:
-
-				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-				break;
-
-
-			case 4:
-
-				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
-				break;
-
-
-			case 5:
-
-				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemThinMaterial];
-				break;
-
-
-			case 6:
-
-				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemUltraThinMaterial];
-				break;
-
-
-			case 7:
-
-				lsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemChromeMaterial];
-				break;
-
-		}
-
-		self.blurView = [[UIVisualEffectView alloc] initWithEffect:lsBlurEffect];
-		self.blurView.tag = 1337;
-		self.blurView.alpha = lsIntensity;
-		self.blurView.frame = self.view.bounds;
-		self.blurView.clipsToBounds = YES;
-		self.blurView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[self.view insertSubview:self.blurView atIndex:0];
+		self.blurView = blurView(self, lsIntensity);
 
 		if(blurIfNotifs && notificationCount == 0) self.blurView.alpha = 0;
 
@@ -302,51 +214,45 @@ NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger sect
 
 	else if(!kTakoExists) {
 
- 		if((notificationCount == 0) && (axonCellCount == 0)) {
-
-			[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-
-				self.blurView.alpha = 0;
-				self.gaussianBlurView.alpha = 0;
-
-			} completion:nil];
-
-		} else {
-
-			[UIView transitionWithView:self.blurView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-
-				self.blurView.alpha = lsBlur ? lsIntensity : 1;
-				self.gaussianBlurView.alpha = lsBlur ? lsIntensity : 1;
-
-			} completion:nil];
-
-		}
+ 		if(axonCellCount == 0 && notificationCount == 0) [self fadeOutBlur];
+ 		else [self fadeInBlur];
 
 	} 
 
 	else {
 
-		if(takoCellCount == 0) {
-
-			[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-
-				self.blurView.alpha = 0;
-				self.gaussianBlurView.alpha = 0;
-
-			} completion:nil];
-
-		} else {
-
-			[UIView transitionWithView:self.blurView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-
-				self.blurView.alpha = lsBlur ? lsIntensity : 1;
-				self.gaussianBlurView.alpha = lsBlur ? lsIntensity : 1;
-
-			} completion:nil];
-
-		}
+		if(takoCellCount == 0) [self fadeOutBlur];
+		else [self fadeInBlur];
 
 	}
+
+}
+
+
+%new
+
+- (void)fadeInBlur {
+
+	[UIView animateWithDuration:0.8 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+
+		self.blurView.alpha = lsBlur ? lsIntensity : 1;
+		self.gaussianBlurView.alpha = lsBlur ? lsIntensity : 1;
+
+	} completion:nil];
+
+}
+
+
+%new
+
+- (void)fadeOutBlur {
+
+	[UIView animateWithDuration:1.5 delay:0.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+
+		self.blurView.alpha = 0;
+		self.gaussianBlurView.alpha = 0;
+
+	} completion:nil];
 
 }
 
@@ -367,8 +273,6 @@ NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger sect
 %end
 
 
-
-
 %hook SBHomeScreenViewController
 
 
@@ -387,74 +291,13 @@ NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger sect
 
 	if(!hsBlur) return;
 
-	if(hsBlurType == 0) {
-
-		_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
-
-		self.gaussianBlurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
-		self.gaussianBlurView.tag = 1337;
-		self.gaussianBlurView.alpha = hsIntensity;
-		self.gaussianBlurView._blurRadius = 80.0;
-		self.gaussianBlurView._blurQuality = @"high";
-		self.gaussianBlurView.blurRadiusSetOnce = NO;
-		[self.view insertSubview:self.gaussianBlurView atIndex:0];
-
-	}
+	if(hsBlurType == 0) self.gaussianBlurView = gaussianBlurView(self, hsIntensity);
 
 	else {
 
-		switch(hsBlurType) {
+		blurType(hsBlurType);
 
-			case 1:
-
-				hsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-				break;
-
-
-			case 2:
-
-				hsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-				break;
-
-
-			case 3:
-
-				hsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-				break;
-
-
-			case 4:
-
-				hsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
-				break;
-
-
-			case 5:
-
-				hsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemThinMaterial];
-				break;
-
-
-			case 6:
-
-				hsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemUltraThinMaterial];
-				break;
-
-
-			case 7:
-
-				hsBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemChromeMaterial];
-				break;
-
-		}
-
-		self.blurView = [[UIVisualEffectView alloc] initWithEffect:hsBlurEffect];
-		self.blurView .tag = 1337;
-		self.blurView.alpha = hsIntensity;
-		self.blurView .frame = self.view.bounds;
-		self.blurView .clipsToBounds = YES;
-		self.blurView .autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[self.view insertSubview:self.blurView atIndex:0];
+		self.blurView = blurView(self, hsIntensity);
 
 	}
 
@@ -476,8 +319,4 @@ NSInteger takoNumberOfCells(id self, SEL _cmd, id collectionView, NSInteger sect
 %end
 
 
-%ctor {
-
-	loadPrefs();
-
-}
+%ctor { loadPrefs(); }
