@@ -1,11 +1,11 @@
 # Amēlija
 
-![download](https://i.imgur.com/TA0dWVT.png)
+<img src="https://i.imgur.com/TA0dWVT.png" width="300">
 
 ## Features
 
-* Custom Blurs for your LockScreen.
-* Custom Blurs for your HomeScreen.
+* Custom blurs for your LockScreen.
+* Custom blurs for your HomeScreen.
 
 ## Blur Types
 
@@ -14,9 +14,9 @@
 * Light.
 * Adaptive.
 * Promiment.
-* System Thin Material.
-* System Chrome Material.
-* System Ultra Thin Material.
+* System thin material.
+* System chrome material.
+* System ultra thin material.
 
 ##  Socials
 
