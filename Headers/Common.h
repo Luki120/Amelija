@@ -1,4 +1,8 @@
-@import UIKit;
+static NSString *const kPath = @"/var/mobile/Library/Preferences/me.luki.amēlijaprefs.plist";
+
+static NSNotificationName const AmelijaLSBlurAppliedNotification = @"AmelijaLSBlurAppliedNotification";
+static NSNotificationName const AmelijaNotificationArrivedNotification = @"AmelijaNotificationArrivedNotification";
+static NSNotificationName const AmelijaHSBlurAppliedNotification = @"AmelijaHSBlurAppliedNotification";
 
 
 @interface _UIBackdropViewSettings : NSObject
@@ -7,10 +11,6 @@
 
 
 @interface _UIBackdropView : UIView
-@property (assign, nonatomic) double _blurRadius;
-@property (assign, nonatomic) BOOL blurRadiusSetOnce;
-@property (copy, nonatomic) NSString *_blurQuality;
-- (id)initWithSettings:(id)arg1;
 - (id)initWithFrame:(CGRect)arg1 autosizesToFitSuperview:(BOOL)arg2 settings:(id)arg3;
 @end
 

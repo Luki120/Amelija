@@ -1,3 +1,5 @@
+@import UIKit;
+#import "Headers/Common.h"
 #import "Headers/Prefs.h"
 
 
@@ -31,6 +33,7 @@
 @interface TKOView : UIView
 @end
 
+#define kTakoExists [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Tako.dylib"]
 
 // Reusable
 
@@ -55,8 +58,6 @@ static _UIBackdropView *gaussianBlurView(UIViewController *self, CGFloat alpha) 
 	_UIBackdropView *gaussianBlurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
 	gaussianBlurView.tag = 1337;
 	gaussianBlurView.alpha = alpha;
-	gaussianBlurView._blurQuality = @"high";
-	gaussianBlurView.blurRadiusSetOnce = NO;
 	[self.view insertSubview:gaussianBlurView atIndex:0];
 
 	return gaussianBlurView;
@@ -78,26 +79,20 @@ static void blurType(NSInteger blurType) {
 }
 
 
-static NSInteger (*origAxonNumberOfItemsInSection)(id self, SEL _cmd, id collectionView, NSInteger);
-
-static NSInteger overrideAxonNumberOfItemsInSection(id self, SEL _cmd, id collectionView, NSInteger section) {
+static NSInteger (*origAxonNumberOfItemsInSection)(AXNView *, SEL, UICollectionView *, NSInteger);
+static NSInteger overrideAxonNumberOfItemsInSection(AXNView *self, SEL _cmd, UICollectionView *collectionView, NSInteger section) {
 
 	axonCellCount = origAxonNumberOfItemsInSection(self, _cmd, collectionView, section);
-
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
-
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AmelijaNotificationArrivedNotification object:nil];
 	return axonCellCount;
 
 }
 
-static NSInteger (*origTakoNumberOfItemsInSection)(id self, SEL _cmd, id collectionView, NSInteger);
-
-static NSInteger overrideTakoNumberOfItemsInSection(id self, SEL _cmd, id collectionView, NSInteger section) {
+static NSInteger (*origTakoNumberOfItemsInSection)(TKOView *, SEL, UICollectionView *, NSInteger);
+static NSInteger overrideTakoNumberOfItemsInSection(TKOView *self, SEL _cmd, UICollectionView *collectionView, NSInteger section) {
 
 	takoCellCount = origTakoNumberOfItemsInSection(self, _cmd, collectionView, section);
-
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
-
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AmelijaNotificationArrivedNotification object:nil];
 	return takoCellCount;
 
 }
@@ -105,8 +100,7 @@ static NSInteger overrideTakoNumberOfItemsInSection(id self, SEL _cmd, id collec
 
 %hook SpringBoard
 
-
-- (void)applicationDidFinishLaunching:(id)app {
+- (void)applicationDidFinishLaunching:(UIApplication *)application {
 
 	%orig;
 
@@ -115,12 +109,10 @@ static NSInteger overrideTakoNumberOfItemsInSection(id self, SEL _cmd, id collec
 
 }
 
-
 %end
 
 
 %hook NCNotificationMasterList
-
 
 - (void)removeNotificationRequest:(id)arg1 { // get notification count in a reliable way
 
@@ -151,20 +143,17 @@ static NSInteger overrideTakoNumberOfItemsInSection(id self, SEL _cmd, id collec
 - (void)postNotif {
 
 	notificationCount = [self notificationCount];
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"notifArrivedSoApplyingBlurNow" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AmelijaNotificationArrivedNotification object:nil];
 
 }
-
 
 %end
 
 
 %hook CSCoverSheetViewController
 
-
 %property (nonatomic, strong) UIView *blurView;
 %property (nonatomic, strong) _UIBackdropView *gaussianBlurView;
-
 
 %new
 
@@ -214,8 +203,8 @@ static NSInteger overrideTakoNumberOfItemsInSection(id self, SEL _cmd, id collec
 
 	else if(!kTakoExists) {
 
- 		if(axonCellCount == 0 && notificationCount == 0) [self fadeOutBlur];
- 		else [self fadeInBlur];
+		if(axonCellCount == 0 && notificationCount == 0) [self fadeOutBlur];
+		else [self fadeInBlur];
 
 	} 
 
@@ -262,26 +251,20 @@ static NSInteger overrideTakoNumberOfItemsInSection(id self, SEL _cmd, id collec
 	%orig;
 
 	[self unleashThatLSBlur];
-
-	[NSDistributedNotificationCenter.defaultCenter removeObserver:self];
-	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(unleashThatLSBlur) name:@"lsBlurApplied" object:nil];
-	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(showBlurIfNotifsPresent) name:@"notifArrivedSoApplyingBlurNow" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(unleashThatLSBlur) name:AmelijaLSBlurAppliedNotification object:nil];
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(showBlurIfNotifsPresent) name:AmelijaNotificationArrivedNotification object:nil];
 
 }
-
 
 %end
 
 
 %hook SBHomeScreenViewController
 
-
 %property (nonatomic, strong) UIView *blurView;
 %property (nonatomic, strong) _UIBackdropView *gaussianBlurView;
 
-
 %new
-
 
 - (void)unleashThatHSBlur { // self explanatory
 
@@ -309,12 +292,9 @@ static NSInteger overrideTakoNumberOfItemsInSection(id self, SEL _cmd, id collec
 	%orig;
 
 	[self unleashThatHSBlur];
-
-	[NSDistributedNotificationCenter.defaultCenter removeObserver:self];
-	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(unleashThatHSBlur) name:@"hsBlurApplied" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(unleashThatHSBlur) name:AmelijaHSBlurAppliedNotification object:nil];
 
 }
-
 
 %end
 
