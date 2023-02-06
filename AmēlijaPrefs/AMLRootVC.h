@@ -1,9 +1,11 @@
-#import <Preferences/PSListController.h>
-#import <Preferences/PSSpecifier.h>
-#import <Preferences/PSTableCell.h>
-#import <AudioToolbox/AudioServices.h>
+@import AudioToolbox.AudioServices;
+@import ObjectiveC.message;
+@import ObjectiveC.runtime;
+@import Preferences.PSListController;
+@import Preferences.PSSpecifier;
+@import Preferences.PSTableCell;
 #import <spawn.h>
-#import "Headers/Constants.h"
+#import "Headers/Common.h"
 
 
 @interface OBWelcomeController : UIViewController
@@ -17,12 +19,10 @@
 
 
 @interface LSRootVC : PSListController
-@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
 @end
 
 
 @interface HSRootVC : PSListController
-@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
 @end
 
 
@@ -34,15 +34,6 @@
 @end
 
 
-@interface PSTableCell ()
-- (void)setTitle:(NSString *)t;
-@end
-
-
-@interface AmelijaTableCell : PSTableCell
-@end
-
-
-@interface PSListController (Private)
+@interface PSListController ()
 - (BOOL)containsSpecifier:(PSSpecifier *)arg1;
 @end

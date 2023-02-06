@@ -8,24 +8,6 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Tweak named after...</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>cellClass</key>
-			<string>GcTwitterCell</string>
-			<key>accountLabel</key>
-			<string>Amelia</string>
-			<key>account</key>
-			<string>Exerra</string>
-			<key>URL</key>
-			<string>https://avatars.githubusercontent.com/u/22275786?v=4</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
 			<string>Lead Developer</string>
 		</dict>
 		<dict>
