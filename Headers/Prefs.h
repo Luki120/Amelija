@@ -9,10 +9,6 @@ static float lsIntensity = 1.0f;
 
 static UIBlurEffect *blurEffect;
 
-static NSInteger axonCellCount = 0;
-static NSInteger takoCellCount = 0;
-static NSInteger notificationCount = 0;
-
 // HS
 
 static BOOL hsBlur;

@@ -1,37 +1,8 @@
-@import UIKit;
-#import "Headers/Common.h"
-#import "Headers/Prefs.h"
+#import "Headers/Amēlija.h"
 
 
-@interface CSCoverSheetViewController : UIViewController
-@property (nonatomic, strong) UIView *blurView;
-@property (nonatomic, strong) _UIBackdropView *gaussianBlurView;
-- (void)unleashThatLSBlur;
-- (void)showBlurIfNotifsPresent;
-- (void)fadeInBlur;
-- (void)fadeOutBlur;
-@end
-
-
-@interface SBHomeScreenViewController : UIViewController
-@property (nonatomic, strong) UIView *blurView;
-@property (nonatomic, strong) _UIBackdropView *gaussianBlurView;
-- (void)unleashThatHSBlur;
-@end
-
-
-@interface NCNotificationMasterList : NSObject
-@property (assign, nonatomic) NSInteger notificationCount;
-- (void)postNotif;
-@end
-
-
-@interface AXNView : UIView
-@end
-
-
-@interface TKOView : UIView
-@end
+static NSInteger cellCount = 0;
+static NSInteger notificationCount = 0;
 
 #define kTakoExists [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Tako.dylib"]
 
@@ -78,38 +49,31 @@ static void blurType(NSInteger blurType) {
 
 }
 
+static NSInteger (*origNumberOfItemsInSection)(UIView *, SEL, UICollectionView *, NSInteger);
+static NSInteger overrideNumberOfItemsInSection(UIView *self, SEL _cmd, UICollectionView *collectionView, NSInteger section) {
 
-static NSInteger (*origAxonNumberOfItemsInSection)(AXNView *, SEL, UICollectionView *, NSInteger);
-static NSInteger overrideAxonNumberOfItemsInSection(AXNView *self, SEL _cmd, UICollectionView *collectionView, NSInteger section) {
-
-	axonCellCount = origAxonNumberOfItemsInSection(self, _cmd, collectionView, section);
+	cellCount = origNumberOfItemsInSection(self, _cmd, collectionView, section);
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AmelijaNotificationArrivedNotification object:nil];
-	return axonCellCount;
+	return cellCount;
 
 }
 
-static NSInteger (*origTakoNumberOfItemsInSection)(TKOView *, SEL, UICollectionView *, NSInteger);
-static NSInteger overrideTakoNumberOfItemsInSection(TKOView *self, SEL _cmd, UICollectionView *collectionView, NSInteger section) {
+static id observer;
+static void appDidFinishLaunching() {
 
-	takoCellCount = origTakoNumberOfItemsInSection(self, _cmd, collectionView, section);
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AmelijaNotificationArrivedNotification object:nil];
-	return takoCellCount;
+	observer = [NSNotificationCenter.defaultCenter addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
 
-}
+		if(NSClassFromString(@"AXNView"))
+			MSHookMessageEx(NSClassFromString(@"AXNView"), @selector(collectionView:numberOfItemsInSection:), (IMP) &overrideNumberOfItemsInSection, (IMP *) &origNumberOfItemsInSection);
 
+		else if(NSClassFromString(@"TKOView"))
+			MSHookMessageEx(NSClassFromString(@"TKOView"), @selector(collectionView:numberOfItemsInSection:), (IMP) &overrideNumberOfItemsInSection, (IMP *) &origNumberOfItemsInSection);
 
-%hook SpringBoard
+		[NSNotificationCenter.defaultCenter removeObserver: observer];
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
-
-	%orig;
-
-	MSHookMessageEx(%c(AXNView), @selector(collectionView:numberOfItemsInSection:), (IMP) &overrideAxonNumberOfItemsInSection, (IMP *) &origAxonNumberOfItemsInSection);
-	MSHookMessageEx(%c(TKOView), @selector(collectionView:numberOfItemsInSection:), (IMP) &overrideTakoNumberOfItemsInSection, (IMP *) &origTakoNumberOfItemsInSection);
+	}];
 
 }
-
-%end
 
 
 %hook NCNotificationMasterList
@@ -137,7 +101,6 @@ static NSInteger overrideTakoNumberOfItemsInSection(TKOView *self, SEL _cmd, UIC
 
 }
 
-
 %new
 
 - (void)postNotif {
@@ -161,14 +124,12 @@ static NSInteger overrideTakoNumberOfItemsInSection(TKOView *self, SEL _cmd, UIC
 
 	loadPrefs();
 
-	[[self.view viewWithTag:1337] removeFromSuperview];
+	[[self.view viewWithTag: 1337] removeFromSuperview];
 
 	if(!lsBlur) return;
-
 	if(lsBlurType == 0) {
 
 		self.gaussianBlurView = gaussianBlurView(self, lsIntensity);
-
 		if(blurIfNotifs && notificationCount == 0) self.gaussianBlurView.alpha = 0;
 
 	}
@@ -178,7 +139,6 @@ static NSInteger overrideTakoNumberOfItemsInSection(TKOView *self, SEL _cmd, UIC
 		blurType(lsBlurType);
 
 		self.blurView = blurView(self, lsIntensity);
-
 		if(blurIfNotifs && notificationCount == 0) self.blurView.alpha = 0;
 
 	}
@@ -186,7 +146,6 @@ static NSInteger overrideTakoNumberOfItemsInSection(TKOView *self, SEL _cmd, UIC
 	if(self.blurView || self.gaussianBlurView) [self showBlurIfNotifsPresent];
 
 }
-
 
 %new
 
@@ -203,20 +162,19 @@ static NSInteger overrideTakoNumberOfItemsInSection(TKOView *self, SEL _cmd, UIC
 
 	else if(!kTakoExists) {
 
-		if(axonCellCount == 0 && notificationCount == 0) [self fadeOutBlur];
+		if(cellCount == 0 && notificationCount == 0) [self fadeOutBlur];
 		else [self fadeInBlur];
 
 	} 
 
 	else {
 
-		if(takoCellCount == 0) [self fadeOutBlur];
+		if(cellCount == 0) [self fadeOutBlur];
 		else [self fadeInBlur];
 
 	}
 
 }
-
 
 %new
 
@@ -230,7 +188,6 @@ static NSInteger overrideTakoNumberOfItemsInSection(TKOView *self, SEL _cmd, UIC
 	} completion:nil];
 
 }
-
 
 %new
 
@@ -270,16 +227,14 @@ static NSInteger overrideTakoNumberOfItemsInSection(TKOView *self, SEL _cmd, UIC
 
 	loadPrefs();
 
-	[[self.view viewWithTag:1337] removeFromSuperview];
+	[[self.view viewWithTag: 1337] removeFromSuperview];
 
 	if(!hsBlur) return;
-
 	if(hsBlurType == 0) self.gaussianBlurView = gaussianBlurView(self, hsIntensity);
 
 	else {
 
 		blurType(hsBlurType);
-
 		self.blurView = blurView(self, hsIntensity);
 
 	}
@@ -299,4 +254,9 @@ static NSInteger overrideTakoNumberOfItemsInSection(TKOView *self, SEL _cmd, UIC
 %end
 
 
-%ctor { loadPrefs(); }
+%ctor {
+
+	loadPrefs();
+	appDidFinishLaunching();
+
+}
