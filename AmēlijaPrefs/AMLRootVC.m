@@ -8,7 +8,6 @@
 	UIView *headerView;
 	UIImageView *iconImageView;
 	UIImageView *headerImageView;
-	NSString *xinaPath;
 	OBWelcomeController *changelogController;
 
 }
@@ -31,7 +30,6 @@
 	static dispatch_once_t onceToken = 0;
 	dispatch_once(&onceToken, ^{ registerAmelijaTintCellClass(); });
 
-	xinaPath = [[NSFileManager defaultManager] fileExistsAtPath: @"/var/jb/"] ? @"/var/jb/" : @"";
 	[self setupUI];
 
 	return self;
@@ -41,9 +39,9 @@
 
 - (void)setupUI {
 
-	NSString *bannerImagePath = [NSString stringWithFormat:@"%@Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMBanner.png", xinaPath];
+	NSString *bannerImagePath = rootlessPathNS(@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMBanner.png");
 
-	UIImage *iconImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/Amēlija@2x.png"];
+	UIImage *iconImage = [UIImage imageWithContentsOfFile:rootlessPathNS(@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/Amēlija@2x.png")];
 	UIImage *bannerImage = [UIImage imageWithContentsOfFile: bannerImagePath];
 
 	if(!headerView) headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,200,200)];
@@ -100,13 +98,14 @@
 
 	AudioServicesPlaySystemSound(1521);
 
-	NSString *tweakIconImagePath = [NSString stringWithFormat: @"%@Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMHotIcon.png", xinaPath];
+	NSString *tweakIconImagePath = rootlessPathNS(@"/Library/PreferenceBundles/AmēlijaPrefs.bundle/Assets/AMHotIcon.png");
 
 	UIImage *tweakIconImage = [UIImage imageWithContentsOfFile: tweakIconImagePath];
 	UIImage *checkmarkImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
 
 	if(changelogController) { [self presentViewController:changelogController animated:YES completion:nil]; return; }
-	changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"1.2" icon:tweakIconImage];
+	changelogController = [[OBWelcomeController alloc] initWithTitle:@"Amēlija" detailText:@"2.0" icon:tweakIconImage];
+	[changelogController addBulletedListItemWithTitle:@"Tweak" description:@"Added rootless support." image:checkmarkImage];
 	[changelogController addBulletedListItemWithTitle:@"Code" description:@"Refactoring ⇝ everything works the same, but better." image:checkmarkImage];
 
 	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
@@ -168,7 +167,7 @@
 
 	pid_t pid;
 	const char* args[] = {"killall", "backboardd", NULL, NULL};
-	posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*)args, NULL);
+	posix_spawn(&pid, rootlessPathC("/usr/bin/killall"), NULL, NULL, (char* const*)args, NULL);
 
 }
 
@@ -297,7 +296,7 @@ static void registerAmelijaTintCellClass() {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
-	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
+	return settings[specifier.properties[@"key"]] ?: specifier.properties[@"default"];
 
 }
 
@@ -309,10 +308,10 @@ static void registerAmelijaTintCellClass() {
 	[settings setObject:value forKey:specifier.properties[@"key"]];
 	[settings writeToFile:kPath atomically:YES];
 
+	[super setPreferenceValue:value specifier:specifier];
+
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AmelijaLSBlurAppliedNotification object:nil];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AmelijaNotificationArrivedNotification object:nil];
-
-	[super setPreferenceValue:value specifier:specifier];
 
 	NSString *key = [specifier propertyForKey:@"key"];
 
@@ -395,7 +394,7 @@ static void registerAmelijaTintCellClass() {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:kPath]];
-	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
+	return settings[specifier.properties[@"key"]] ?: specifier.properties[@"default"];
 
 }
 
@@ -407,9 +406,9 @@ static void registerAmelijaTintCellClass() {
 	[settings setObject:value forKey:specifier.properties[@"key"]];
 	[settings writeToFile:kPath atomically:YES];
 
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AmelijaHSBlurAppliedNotification object:nil];
-
 	[super setPreferenceValue:value specifier:specifier];
+
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AmelijaHSBlurAppliedNotification object:nil];
 
 	NSString *key = [specifier propertyForKey:@"key"];
 

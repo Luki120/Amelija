@@ -1,11 +1,10 @@
 @import AudioToolbox.AudioServices;
 @import ObjectiveC.message;
-@import ObjectiveC.runtime;
 @import Preferences.PSListController;
 @import Preferences.PSSpecifier;
 @import Preferences.PSTableCell;
 #import <spawn.h>
-#import "Headers/Common.h"
+#import "../Headers/Common.h"
 
 
 @interface OBWelcomeController : UIViewController
@@ -35,5 +34,5 @@
 
 
 @interface PSListController ()
-- (BOOL)containsSpecifier:(PSSpecifier *)arg1;
+- (BOOL)containsSpecifier:(PSSpecifier *)specifier;
 @end

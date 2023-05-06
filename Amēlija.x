@@ -4,7 +4,7 @@
 static NSInteger cellCount = 0;
 static NSInteger notificationCount = 0;
 
-#define kTakoExists [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Tako.dylib"]
+#define kTakoExists [[NSFileManager defaultManager] fileExistsAtPath:rootlessPathNS(@"/Library/MobileSubstrate/DynamicLibraries/Tako.dylib")]
 
 // Reusable
 

@@ -1,7 +1,7 @@
-@import CydiaSubstrate;
 @import UIKit;
-#import "Headers/Common.h"
-#import "Headers/Prefs.h"
+@import CydiaSubstrate;
+#import "Common.h"
+#import "Prefs.h"
 
 
 @interface CSCoverSheetViewController : UIViewController
