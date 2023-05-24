@@ -1,6 +1,6 @@
 # Amēlija
 
-<img src="https://i.imgur.com/TA0dWVT.png" width="300">
+<img src="https://github.com/Luki120/Amelija/assets/27637025/bf0a1b34-d11b-4b44-a456-58f079427b6d" width="300">
 
 ## Features
 
