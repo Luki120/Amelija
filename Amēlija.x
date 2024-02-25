@@ -4,6 +4,7 @@
 static NSInteger cellCount = 0;
 static NSInteger notificationCount = 0;
 
+#define kEnekoExists [[NSFileManager defaultManager] fileExistsAtPath:rootlessPathNS(@"/Library/MobileSubstrate/DynamicLibraries/Eneko.dylib")]
 #define kTakoExists [[NSFileManager defaultManager] fileExistsAtPath:rootlessPathNS(@"/Library/MobileSubstrate/DynamicLibraries/Tako.dylib")]
 
 // Reusable
@@ -238,6 +239,16 @@ static void appDidFinishLaunching() {
 		self.blurView = blurView(self, hsIntensity);
 
 	}
+
+	if(!kEnekoExists) return;
+
+	CALayer *videoLayer;
+
+	for(CALayer *sublayer in self.view.layer.sublayers)
+		if([sublayer isKindOfClass: NSClassFromString(@"AVPlayerLayer")]) videoLayer = sublayer;
+
+	[videoLayer removeFromSuperlayer];
+	[self.view.layer insertSublayer:videoLayer atIndex: 0];
 
 }
 
